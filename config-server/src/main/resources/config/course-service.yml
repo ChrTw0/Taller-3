@@ -1,0 +1,48 @@
+# Configuración específica para Course Service
+server:
+  port: 8082
+
+spring:
+  application:
+    name: course-service
+  jpa:
+    hibernate:
+      default_schema: course_schema
+  flyway:
+    schemas: course_schema
+    locations: classpath:db/migration/course
+
+# Configuración geoespacial
+geo:
+  default-radius: 2.0 # metros
+  max-radius: 10.0 # metros máximo permitido
+  coordinate-precision: 6 # decimales para lat/lng
+  altitude-required: false
+
+# Validación de coordenadas
+validation:
+  coordinates:
+    latitude:
+      min: -90.0
+      max: 90.0
+    longitude:
+      min: -180.0
+      max: 180.0
+    altitude:
+      min: -1000.0
+      max: 9000.0 # metros sobre el nivel del mar
+
+# Configuración de horarios
+schedule:
+  time-zone: "America/Lima"
+  academic-year:
+    start-month: 3 # Marzo
+    end-month: 12 # Diciembre
+  class-duration:
+    min-minutes: 30
+    max-minutes: 240
+    default-minutes: 90
+
+logging:
+  level:
+    com.geoattend.course: DEBUG

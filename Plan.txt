@@ -1,0 +1,44 @@
+Concepto del Sistema:
+
+Un sistema de asistencia por geocerca: la app Android detecta tu ubicación GPS y, si entras en un radio ≤ 2m de las coordenadas del aula, envía un “push” (ubicación, día/hora y tu código de alumno) al sistema web. El servidor web valida y registra la asistencia en la clase correspondiente. El profesor gestiona todo desde la web: crea su clase y añade alumnos.
+
+Entidades:
+
+Alumno: código (p. ej., 202001041), nombre, estado.
+Profesor.
+Clase/Curso: nombre, sección, coordenadas del aula (latitud, longitud, altitud opcional), horario.
+Evento de presencia (intento de marcación): código de alumno, latitud, longitud, altitud, precisión/accuracy, fecha y hora.
+Asistencia registrada: presente/tarde/ausente, fuente (auto/manual), timestamp (Tiempo que se marca la asistencia)
+Push celular
+Ubicación, Dia y Hora y Codigo
+Registro automatico de Asistencia
+Codigo del alumno (20200104I)
+Altitud (º)
+Longitud (º)
+FLUJO DEL SISTEMA
+Alumnos
+Android
+
+
+Abrir app android  
+Llegar al aula  
+Detectar ubicación GPS  
+
+
+
+Calcular distancia (5m)  
+
+Generar evento de asistencia  
+
+Sistema web
+
+Enviar evento de asistencia a la web  
+Validar datos del evento  
+
+
+Registrar asistencia  
+
+Almacenar log  
+
+Actualizar lista de asistencia  
+ARQUITECTURA (POR DEFINIR)

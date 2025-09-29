@@ -1,0 +1,72 @@
+# Configuración específica para Attendance Service
+server:
+  port: 8083
+
+spring:
+  application:
+    name: attendance-service
+  jpa:
+    hibernate:
+      default_schema: attendance_schema
+  flyway:
+    schemas: attendance_schema
+    locations: classpath:db/migration/attendance
+
+# Configuración del algoritmo de geolocalización
+geolocation:
+  algorithm: haversine # haversine, vincenty, euclidean
+  earth-radius: 6371000 # metros (radio de la Tierra)
+  default-accuracy-threshold: 10.0 # metros
+  max-accuracy-threshold: 50.0 # metros
+
+# Configuración de asistencia automática
+attendance:
+  auto-register:
+    enabled: true
+    proximity-threshold: 2.0 # metros
+    time-window:
+      before-class: 15 # minutos antes de la clase
+      after-start: 30 # minutos después del inicio
+  statuses:
+    present: "PRESENT"
+    late: "LATE"
+    absent: "ABSENT"
+  late-threshold: 10 # minutos de tolerancia
+
+# Configuración de eventos GPS
+gps-events:
+  batch-processing:
+    enabled: true
+    batch-size: 100
+    flush-interval: 5000 # milisegundos
+  validation:
+    required-accuracy: 20.0 # metros
+    min-speed: 0.0 # km/h (para filtrar datos GPS inválidos)
+    max-speed: 200.0 # km/h
+  cleanup:
+    retention-days: 90 # días para mantener eventos GPS
+
+# Configuración de notificaciones
+notifications:
+  attendance-registered:
+    enabled: true
+    immediate: true
+  daily-summary:
+    enabled: true
+    time: "18:00"
+  weekly-report:
+    enabled: true
+    day: "SUNDAY"
+    time: "20:00"
+
+# Configuración de reportes
+reports:
+  cache:
+    ttl: 300 # segundos (5 minutos)
+  export:
+    formats: ["PDF", "EXCEL", "CSV"]
+    max-records: 10000
+
+logging:
+  level:
+    com.geoattend.attendance: DEBUG

@@ -1,0 +1,115 @@
+# Configuración específica para API Gateway
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      # Configuración de rutas
+      routes:
+        # User Service Routes
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: user-service-cb
+                fallbackUri: forward:/fallback/user-service
+
+        # Course Service Routes
+        - id: course-service
+          uri: lb://course-service
+          predicates:
+            - Path=/api/courses/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: course-service-cb
+                fallbackUri: forward:/fallback/course-service
+
+        # Attendance Service Routes
+        - id: attendance-service
+          uri: lb://attendance-service
+          predicates:
+            - Path=/api/attendance/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: attendance-service-cb
+                fallbackUri: forward:/fallback/attendance-service
+
+        # Notification Service Routes
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - StripPrefix=1
+
+      # Configuración global de CORS
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: "*"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+            allow-credentials: true
+
+# Configuración de Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service-cb:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+      course-service-cb:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+      attendance-service-cb:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+
+# Configuración de Rate Limiting
+rate-limit:
+  global:
+    requests-per-second: 100
+  per-user:
+    requests-per-minute: 60
+  endpoints:
+    auth:
+      requests-per-minute: 10
+    attendance:
+      requests-per-minute: 30
+
+# Configuración de timeout
+timeout:
+  connect: 5000 # milisegundos
+  read: 30000 # milisegundos
+  write: 30000 # milisegundos
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.geoattend.gateway: DEBUG

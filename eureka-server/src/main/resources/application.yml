@@ -1,0 +1,49 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: default
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    # No se registra a sí mismo
+    register-with-eureka: false
+    # No busca otros servicios de registro
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    # Configuración para desarrollo - deshabilitar auto-scale para demo
+    enable-self-preservation: false
+    # Frecuencia de limpieza de servicios inactivos
+    eviction-interval-timer-in-ms: 15000
+    # Tiempo de espera para renovación
+    expected-client-renewal-interval-seconds: 30
+    # Umbral de renovación
+    renewal-percent-threshold: 0.85
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] - %msg%n"

@@ -1,0 +1,180 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: geoattend-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: user_schema,course_schema,attendance_schema,notification_schema
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d geoattend_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Eureka Service Discovery
+  eureka-server:
+    build: ./eureka-server
+    container_name: geoattend-eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Config Server
+  config-server:
+    build: ./config-server
+    container_name: geoattend-config
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8888:8888"
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # User Service
+  user-service:
+    build: ./user-service
+    container_name: geoattend-user-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DEFAULT_SCHEMA: user_schema
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+    ports:
+      - "8081:8081"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Course Service
+  course-service:
+    build: ./course-service
+    container_name: geoattend-course-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DEFAULT_SCHEMA: course_schema
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+    ports:
+      - "8082:8082"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Attendance Service
+  attendance-service:
+    build: ./attendance-service
+    container_name: geoattend-attendance-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DEFAULT_SCHEMA: attendance_schema
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+    ports:
+      - "8083:8083"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Notification Service
+  notification-service:
+    build: ./notification-service
+    container_name: geoattend-notification-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DEFAULT_SCHEMA: notification_schema
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+    ports:
+      - "8084:8084"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: geoattend-api-gateway
+    depends_on:
+      - eureka-server
+      - config-server
+      - user-service
+      - course-service
+      - attendance-service
+      - notification-service
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+    ports:
+      - "8080:8080"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+volumes:
+  postgres_data:
+
+networks:
+  geoattend-network:
+    driver: bridge
