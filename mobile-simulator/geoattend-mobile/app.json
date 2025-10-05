@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "GeoAttend Mobile",
+    "slug": "geoattend-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#3B82F6"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.geoattend.mobile",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "GeoAttend necesita acceso a tu ubicación para registrar tu asistencia en el aula.",
+        "NSLocationAlwaysUsageDescription": "GeoAttend necesita acceso a tu ubicación para registrar tu asistencia en el aula."
+      }
+    },
+    "android": {
+      "package": "com.geoattend.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#3B82F6"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "GeoAttend necesita acceso a tu ubicación para registrar tu asistencia."
+        }
+      ]
+    ]
+  }
+}

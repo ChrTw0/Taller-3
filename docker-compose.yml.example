@@ -1,0 +1,198 @@
+services:
+  # User Service Database
+  user-db:
+    image: postgres:15-alpine
+    container_name: geoattend-user-db
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YOUR_DB_PASSWORD_HERE  # Change this!
+    ports:
+      - "5433:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Course Service Database
+  course-db:
+    image: postgres:15-alpine
+    container_name: geoattend-course-db
+    environment:
+      POSTGRES_DB: course_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YOUR_DB_PASSWORD_HERE  # Change this!
+    ports:
+      - "5434:5432"
+    volumes:
+      - course_db_data:/var/lib/postgresql/data
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d course_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Attendance Service Database
+  attendance-db:
+    image: postgres:15-alpine
+    container_name: geoattend-attendance-db
+    environment:
+      POSTGRES_DB: attendance_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YOUR_DB_PASSWORD_HERE  # Change this!
+    ports:
+      - "5435:5432"
+    volumes:
+      - attendance_db_data:/var/lib/postgresql/data
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d attendance_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Notification Service Database
+  notification-db:
+    image: postgres:15-alpine
+    container_name: geoattend-notification-db
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YOUR_DB_PASSWORD_HERE  # Change this!
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    networks:
+      - geoattend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # User Service (FastAPI)
+  user-service:
+    build: ./user-service
+    container_name: geoattend-user-service
+    depends_on:
+      user-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:YOUR_DB_PASSWORD_HERE@user-db:5432/user_db
+      SERVICE_PORT: 8001
+      SECRET_KEY: YOUR_SECRET_KEY_MIN_32_CHARS_HERE  # Change this! Must match across all services
+    ports:
+      - "8001:8001"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Course Service (FastAPI)
+  course-service:
+    build: ./course-service
+    container_name: geoattend-course-service
+    depends_on:
+      course-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:YOUR_DB_PASSWORD_HERE@course-db:5432/course_db
+      SERVICE_PORT: 8002
+      USER_SERVICE_URL: http://user-service:8001
+      SECRET_KEY: YOUR_SECRET_KEY_MIN_32_CHARS_HERE  # Change this! Must match across all services
+    ports:
+      - "8002:8002"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Attendance Service (FastAPI)
+  attendance-service:
+    build: ./attendance-service
+    container_name: geoattend-attendance-service
+    depends_on:
+      attendance-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:YOUR_DB_PASSWORD_HERE@attendance-db:5432/attendance_db
+      SERVICE_PORT: 8003
+      USER_SERVICE_URL: http://user-service:8001
+      COURSE_SERVICE_URL: http://course-service:8002
+      SECRET_KEY: YOUR_SECRET_KEY_MIN_32_CHARS_HERE  # Change this! Must match across all services
+    ports:
+      - "8003:8003"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # Notification Service (FastAPI)
+  notification-service:
+    build: ./notification-service
+    container_name: geoattend-notification-service
+    depends_on:
+      notification-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:YOUR_DB_PASSWORD_HERE@notification-db:5432/notification_db
+      SERVICE_PORT: 8004
+      USER_SERVICE_URL: http://user-service:8001
+      COURSE_SERVICE_URL: http://course-service:8002
+      ATTENDANCE_SERVICE_URL: http://attendance-service:8003
+      SECRET_KEY: YOUR_SECRET_KEY_MIN_32_CHARS_HERE  # Change this! Must match across all services
+      # Email Configuration (Optional)
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USERNAME: your-email@gmail.com  # Change this if using email notifications
+      SMTP_PASSWORD: your-app-password-here  # Change this if using email notifications
+      SMTP_FROM_EMAIL: noreply@geoattend.com
+      SMTP_FROM_NAME: GeoAttend
+      # Firebase Cloud Messaging (Optional)
+      FCM_ENABLED: false
+      FCM_SERVER_KEY: your-fcm-server-key-here  # Change this if using FCM
+    ports:
+      - "8004:8004"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+  # API Gateway (FastAPI)
+  api-gateway:
+    build: ./api-gateway
+    container_name: geoattend-api-gateway
+    depends_on:
+      - user-service
+      - course-service
+      - attendance-service
+      - notification-service
+    environment:
+      SERVICE_PORT: 8000
+      USER_SERVICE_URL: http://user-service:8001
+      COURSE_SERVICE_URL: http://course-service:8002
+      ATTENDANCE_SERVICE_URL: http://attendance-service:8003
+      NOTIFICATION_SERVICE_URL: http://notification-service:8004
+      JWT_SECRET_KEY: YOUR_SECRET_KEY_MIN_32_CHARS_HERE  # Change this! Must match across all services
+      RATE_LIMIT_ENABLED: true
+      RATE_LIMIT_PER_MINUTE: 60
+    ports:
+      - "8000:8000"
+    networks:
+      - geoattend-network
+    restart: on-failure
+
+volumes:
+  user_db_data:
+  course_db_data:
+  attendance_db_data:
+  notification_db_data:
+
+networks:
+  geoattend-network:
+    driver: bridge

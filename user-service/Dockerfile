@@ -1,29 +1,38 @@
-# Dockerfile para User Service
-FROM openjdk:17-jdk-alpine
+# User Service Dockerfile
+FROM python:3.11-slim
 
-# Metadatos
-LABEL maintainer="GeoAttend Team"
-LABEL service="user-service"
-LABEL version="1.0.0"
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Variables de entorno
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
-
-# Instalar curl para health checks
-RUN apk add --no-cache curl
-
-# Crear directorio de trabajo
+# Set work directory
 WORKDIR /app
 
-# Copiar archivo JAR
-COPY target/user-service-1.0.0.jar app.jar
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        gcc \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
 
-# Exponer puerto
-EXPOSE 8081
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project
+COPY src/ ./src/
+
+# Create non-root user
+RUN adduser --disabled-password --gecos '' appuser
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# Expose port
+EXPOSE 8001
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8081/actuator/health || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8001/health || exit 1
 
-# Comando de inicio
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Run the application
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8001"]
