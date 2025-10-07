@@ -216,10 +216,10 @@ npm run web
 ### Bases de Datos (Docker)
 | Base de Datos | Puerto | Usuario | Password |
 |--------------|--------|---------|----------|
-| user-db | 5433 | postgres | postgres |
-| course-db | 5434 | postgres | postgres |
-| attendance-db | 5435 | postgres | postgres |
-| notification-db | 5436 | postgres | postgres |
+| user-db | 5433 | postgres | 1234 |
+| course-db | 5434 | postgres | 1234 |
+| attendance-db | 5435 | postgres | 1234 |
+| notification-db | 5436 | postgres | 1234 |
 
 ## 📊 Documentación de APIs
 

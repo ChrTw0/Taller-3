@@ -79,7 +79,8 @@ services:
       timeout: 5s
       retries: 5
 
-  # Eureka Service Discovery (commented out - not using Spring Cloud)
+  
+  # # Eureka Service Discovery (commented out - not using Spring Cloud)
   # eureka-server:
   #   build: ./eureka-server
   #   container_name: geoattend-eureka
@@ -88,7 +89,7 @@ services:
   #   networks:
   #     - geoattend-network
 
-  # Config Server (commented out - not using Spring Cloud)
+  # # Config Server (commented out - not using Spring Cloud)
   # config-server:
   #   build: ./config-server
   #   container_name: geoattend-config
@@ -113,6 +114,8 @@ services:
     networks:
       - geoattend-network
     restart: on-failure
+    volumes:
+      - ./user-service:/app
 
   # Course Service (FastAPI)
   course-service:
@@ -130,6 +133,8 @@ services:
     networks:
       - geoattend-network
     restart: on-failure
+    volumes:
+      - ./course-service:/app
 
   # Attendance Service (FastAPI)
   attendance-service:
@@ -148,6 +153,8 @@ services:
     networks:
       - geoattend-network
     restart: on-failure
+    volumes:
+      - ./attendance-service:/app
 
   # Notification Service (FastAPI)
   notification-service:
@@ -172,6 +179,8 @@ services:
     networks:
       - geoattend-network
     restart: on-failure
+    volumes:
+      - ./notification-service:/app
 
   # API Gateway (FastAPI)
   api-gateway:
@@ -196,6 +205,8 @@ services:
     networks:
       - geoattend-network
     restart: on-failure
+    volumes:
+      - ./api-gateway:/app
 
 volumes:
   user_db_data:
