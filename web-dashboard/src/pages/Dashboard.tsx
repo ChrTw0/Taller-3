@@ -6,7 +6,7 @@ import { WeeklySchedule } from '@/components/dashboard/WeeklySchedule';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Users, BookOpen, ClipboardCheck, Bell } from 'lucide-react';
-import { userApi, courseApi, enrollmentApi, attendanceApi } from '@/lib/api';
+import { userApi, courseApi, enrollmentApi, attendanceApi } from '@/services/api';
 import type { AttendanceRecord } from '@/types/attendance';
 
 export default function Dashboard() {

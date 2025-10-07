@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Trash2, Clock, Building2 } from 'lucide-react';
-import { classroomApi } from '@/lib/api';
+import { classroomApi } from '@/services/api';
 import type { Schedule } from '@/types/course';
 import type { Classroom } from '@/types/classroom';
 

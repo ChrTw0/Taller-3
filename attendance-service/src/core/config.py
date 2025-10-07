@@ -8,45 +8,45 @@ class AttendanceServiceSettings(BaseSettings):
     """Attendance Service specific settings."""
 
     # Service Info
-    service_name: str = Field(default="attendance-service", env="SERVICE_NAME")
-    service_port: int = Field(default=8003, env="SERVICE_PORT")
-    debug: bool = Field(default=True, env="DEBUG")
+    service_name: str = Field(default="attendance-service", alias="SERVICE_NAME")
+    service_port: int = Field(default=8003, alias="SERVICE_PORT")
+    debug: bool = Field(default=True, alias="DEBUG")
 
     # Database - Attendance Service has independent database
     database_url: str = Field(
         default="postgresql+asyncpg://postgres:1234@localhost:5435/attendance_db",
-        env="DATABASE_URL"
+        alias="DATABASE_URL"
     )
 
     # Security - JWT for inter-service authentication
     secret_key: str = Field(
         default="user-service-secret-key-change-in-production",
-        env="SECRET_KEY"
+        alias="SECRET_KEY"
     )
-    jwt_algorithm: str = Field(default="HS256", env="JWT_ALGORITHM")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
 
     # GPS Configuration
-    max_distance_meters: float = Field(default=2.0, env="MAX_DISTANCE_METERS")
-    gps_accuracy_threshold: float = Field(default=20.0, env="GPS_ACCURACY_THRESHOLD")  # meters - increased for mobile GPS
-    earth_radius_km: float = Field(default=6371.0, env="EARTH_RADIUS_KM")  # Earth radius in km
+    max_distance_meters: float = Field(default=2.0, alias="MAX_DISTANCE_METERS")
+    gps_accuracy_threshold: float = Field(default=20.0, alias="GPS_ACCURACY_THRESHOLD")  # meters
+    earth_radius_km: float = Field(default=6371.0, alias="EARTH_RADIUS_KM")  # Earth radius in km
 
     # Attendance Rules
-    min_time_between_records: int = Field(default=300, env="MIN_TIME_BETWEEN_RECORDS")  # seconds (5 min)
-    max_early_arrival: int = Field(default=1800, env="MAX_EARLY_ARRIVAL")  # seconds (30 min)
-    max_late_arrival: int = Field(default=900, env="MAX_LATE_ARRIVAL")  # seconds (15 min)
+    min_time_between_records: int = Field(default=300, alias="MIN_TIME_BETWEEN_RECORDS")  # seconds (5 min)
+    max_early_arrival: int = Field(default=1800, alias="MAX_EARLY_ARRIVAL")  # seconds (30 min)
+    max_late_arrival: int = Field(default=900, alias="MAX_LATE_ARRIVAL")  # seconds (15 min)
 
     # Redis Configuration (for caching and background tasks)
-    redis_url: str = Field(default="redis://localhost:6379/0", env="REDIS_URL")
-    cache_expiration: int = Field(default=3600, env="CACHE_EXPIRATION")  # seconds
+    redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
+    cache_expiration: int = Field(default=3600, alias="CACHE_EXPIRATION")  # seconds
 
     # Inter-service Communication
-    user_service_url: str = Field(default="http://localhost:8001", env="USER_SERVICE_URL")
-    course_service_url: str = Field(default="http://localhost:8002", env="COURSE_SERVICE_URL")
-    notification_service_url: str = Field(default="http://localhost:8004", env="NOTIFICATION_SERVICE_URL")
+    user_service_url: str = Field(default="http://localhost:8001", alias="USER_SERVICE_URL")
+    course_service_url: str = Field(default="http://localhost:8002", alias="COURSE_SERVICE_URL")
+    notification_service_url: str = Field(default="http://localhost:8004", alias="NOTIFICATION_SERVICE_URL")
 
     # HTTP Client Configuration
-    http_timeout: float = Field(default=10.0, env="HTTP_TIMEOUT")
-    max_retries: int = Field(default=3, env="MAX_RETRIES")
+    http_timeout: float = Field(default=10.0, alias="HTTP_TIMEOUT")
+    max_retries: int = Field(default=3, alias="MAX_RETRIES")
 
     class Config:
         env_file = ".env"

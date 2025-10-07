@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Sidebar } from './Sidebar';
-import { cn } from '@/lib/utils';
+import { cn } from '@/services/utils';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

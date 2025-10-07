@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { courseApi, userApi, scheduleApi } from '@/lib/api';
+import { courseApi, userApi, scheduleApi } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

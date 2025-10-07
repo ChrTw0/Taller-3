@@ -5,7 +5,7 @@ import type { Classroom, CreateClassroomData, UpdateClassroomData, ClassroomFilt
 import type { Enrollment, CreateEnrollmentData, UpdateEnrollmentData, EnrollmentFilters } from '@/types/enrollment';
 import type { AttendanceRecord, AttendanceListResponse, AttendanceFilters, UserAttendanceStats, CourseAttendanceStats, CreateAttendanceData } from '@/types/attendance';
 
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+const API_BASE_URL = 'http://192.168.1.4:8000/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

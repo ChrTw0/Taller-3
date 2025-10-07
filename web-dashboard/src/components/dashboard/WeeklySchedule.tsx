@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, MapPin } from 'lucide-react';
-import { courseApi, enrollmentApi, scheduleApi } from '@/lib/api';
+import { courseApi, enrollmentApi, scheduleApi } from '@/services/api';
 import type { Course, Schedule } from '@/types/course';
 
 interface ScheduleWithCourse extends Schedule {

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RefreshCw, Download, Search, Filter } from 'lucide-react';
-import { attendanceApi, userApi, courseApi, classroomApi } from '@/lib/api';
+import { attendanceApi, userApi, courseApi, classroomApi } from '@/services/api';
 import { toast } from 'sonner';
 import type { AttendanceRecord, AttendanceStatus } from '@/types/attendance';
 

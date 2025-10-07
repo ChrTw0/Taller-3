@@ -10,7 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Plus, X, Building2, MapPin } from 'lucide-react';
-import { classroomApi } from '@/lib/api';
+import { classroomApi } from '@/services/api';
 import type { Classroom } from '@/types/classroom';
 
 interface ClassroomSelectorProps {
