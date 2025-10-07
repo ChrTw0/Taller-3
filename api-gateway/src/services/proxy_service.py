@@ -30,6 +30,21 @@ class ProxyService:
                 # Prepare headers
                 request_headers = headers or {}
 
+                # Remove hop-by-hop and conflicting headers
+                for h in [
+                    "content-length",
+                    "transfer-encoding",
+                    "connection",
+                    "keep-alive",
+                    "proxy-authenticate",
+                    "proxy-authorization",
+                    "te",
+                    "trailer",
+                    "upgrade",
+                    "host"
+                ]:
+                    request_headers.pop(h, None)
+
                 # Make request based on method
                 if method == "GET":
                     response = await client.get(url, headers=request_headers, params=query_params)

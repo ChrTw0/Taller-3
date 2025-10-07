@@ -109,7 +109,8 @@ class UserService:
     async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[User]:
         """Get list of users with pagination."""
         result = await db.execute(select(User).offset(skip).limit(limit))
-        return result.scalars().all()
+        users = result.scalars().all()
+        return list(users)
 
     @staticmethod
     async def update_user(db: AsyncSession, user_id: int, user_update: UserUpdate) -> Optional[User]:

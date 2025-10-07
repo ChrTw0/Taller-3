@@ -8,7 +8,7 @@ from loguru import logger
 from ..core.database import get_session
 from ..core.security import create_access_token
 from ..core.config import get_settings
-from ..schemas.user import UserLogin, UserLoginResponse, Token, ErrorResponse, UserCreate, UserCreateResponse
+from ..schemas.user import UserLogin, UserPublic, UserLoginResponse, Token, ErrorResponse, UserCreate, UserCreateResponse, UserResponse
 from ..services.user_service import UserService
 from ..core.security import get_current_user
 
@@ -57,14 +57,14 @@ async def login(
             token_type="bearer",
             expires_in=settings.access_token_expire_minutes * 60
         ),
-        user={
-            "id": user.id,
-            "code": user.code,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "role": user.role,
-            "is_active": user.is_active
-        }
+        user=UserPublic(
+            id=user.id,
+            code=user.code,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            role=user.role,
+            is_active=user.is_active
+        )
     )
 
 @router.post("/refresh")
@@ -129,5 +129,15 @@ async def register_user(
 
     return UserCreateResponse(
         message="User registered successfully",
-        data=new_user
+        data=UserResponse(
+            id=new_user.id,
+            code=new_user.code,
+            email=new_user.email,
+            first_name=new_user.first_name,
+            last_name=new_user.last_name,
+            role=new_user.role,
+            is_active=new_user.is_active,
+            is_verified=new_user.is_verified,
+            created_at=new_user.created_at,
+            updated_at=new_user.updated_at)
     )
