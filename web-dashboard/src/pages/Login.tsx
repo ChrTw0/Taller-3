@@ -124,7 +124,7 @@ export default function Login() {
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
               <p>Credenciales de prueba:</p>
-              <p className="mt-1 font-mono text-xs">admin@example.com / password123</p>
+              <p className="mt-1 font-mono text-xs">admin@test.com / Password123@</p>
             </div>
           </CardContent>
         </Card>

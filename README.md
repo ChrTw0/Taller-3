@@ -1,5 +1,21 @@
 # GeoAttend - Sistema Inteligente de Asistencia por Geocerca
 
+## 👥 Equipo
+
+**Integrantes**
+- Miguel Sullca, Diego Alonso
+- Paredes Mateo, Eduard Rafael
+- Sosa Ramirez, Christian Renato
+- Valencia Grey, William Gerardo	
+
+## 📄 Licencia
+
+Este proyecto es para fines académicos.
+
+**🎯 Objetivo**: Demostrar dominio de arquitectura de microservicios, desarrollo full-stack, y sistemas de geolocalización en un sistema real de asistencia académica.
+
+---
+
 ## 📋 Descripción del Proyecto
 
 **GeoAttend** es un sistema de registro automático de asistencia estudiantil mediante geolocalización GPS, implementado con arquitectura de microservicios. El sistema permite a los estudiantes registrar su asistencia a clases únicamente cuando se encuentran físicamente dentro del aula (verificado por GPS) y durante el horario de clase programado.
@@ -108,24 +124,9 @@ ATTENDANCE_SERVICE_URL=http://localhost:8003
 NOTIFICATION_SERVICE_URL=http://localhost:8004
 ```
 
-### 4. Configurar Docker Compose (Opcional)
+### 4. Levantar contenedores
 
-Si es tu primera vez configurando el proyecto, puedes copiar el archivo de ejemplo:
-
-```bash
-# Copiar docker-compose de ejemplo (opcional)
-cp docker-compose.yml.example docker-compose.yml
-
-# Editar docker-compose.yml y reemplazar:
-# - YOUR_DB_PASSWORD_HERE con tu contraseña de base de datos
-# - YOUR_SECRET_KEY_MIN_32_CHARS_HERE con tu clave secreta (mínimo 32 caracteres)
-# - Configuración SMTP si usarás notificaciones por email
-# - Configuración FCM si usarás notificaciones push
-```
-
-**Nota**: El repositorio ya incluye un `docker-compose.yml` con valores por defecto para desarrollo. Solo usa el `.example` si necesitas una configuración personalizada.
-
-### 5. Levantar Bases de Datos con Docker
+**Si usas Docker**, debes realizar lo siguiente:
 
 ```bash
 # Levantar todas las bases de datos
@@ -133,62 +134,35 @@ docker-compose up -d
 
 # Verificar que estén corriendo
 docker-compose ps
-
-# Ver logs de las bases de datos
-docker-compose logs -f user-db course-db attendance-db notification-db
 ```
 
-Las bases de datos estarán disponibles en:
-- **user-db**: `localhost:5433`
-- **course-db**: `localhost:5434`
-- **attendance-db**: `localhost:5435`
-- **notification-db**: `localhost:5436`
+**Nota**: El repositorio solo incluye un `docker-compose.yml` con valores por defecto para desarrollo.
 
-### 6. Iniciar Microservicios
+Con esto se habrán creado los siguientes contenedores:
 
-Abre **5 terminales diferentes** y ejecuta cada servicio:
+- **Bases de Datos**:
+  - _**user-db**_: `localhost:5433`
+  - _**course-db**_: `localhost:5434`
+  - _**attendance-db**_: `localhost:5435`
+  - _**notification-db**_: `localhost:5436`
+- **Servicios**:
+  - _**user-service**_: `localhost:8001`
+  - _**course-service**_: `localhost:8002`
+  - _**attendance-service**_: `localhost:8003`
+  - _**notification-service**_: `localhost:8004`
+  - _**api-gateway**_: `localhost:8000`
 
-#### Terminal 1 - User Service (Puerto 8001)
-```bash
-cd user-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload
-```
-
-#### Terminal 2 - Course Service (Puerto 8002)
-```bash
-cd course-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8002 --reload
-```
-
-#### Terminal 3 - Attendance Service (Puerto 8003)
-```bash
-cd attendance-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8003 --reload
-```
-
-#### Terminal 4 - Notification Service (Puerto 8004)
-```bash
-cd notification-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8004 --reload
-```
-
-#### Terminal 5 - API Gateway (Puerto 8000)
-```bash
-cd api-gateway
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### 7. 🗄️ Inicializar Base de Datos (Primera Vez)
+### 5. 🗄️ Inicializar Base de Datos (Primera Vez)
 
 Si estás iniciando con bases de datos vacías, ejecuta los scripts de inicialización:
 
 ```bash
 cd database-init
 
-# Windows - Paso 1: Crear admin
+# Windows (CMD) - Paso 1: Crear admin
 1-init-admin.bat
 
-# Windows - Paso 2: Poblar datos
+# Windows (CMD) - Paso 2: Poblar datos
 2-populate-db.bat
 
 # Linux/Mac - Paso 1: Crear admin
@@ -200,7 +174,7 @@ chmod +x *.sh
 ```
 
 **Datos creados:**
-- 1 Administrador (admin@test.com / Password123!)
+- 1 Administrador (admin@test.com / Password123@)
 - 6 Profesores
 - 5 Estudiantes
 - 8 Aulas con GPS
@@ -225,8 +199,9 @@ Accede a: **http://localhost:8080**
 ```bash
 cd mobile-simulator/geoattend-mobile
 npm install
-npm start
+npx expo start --tunnel
 ```
+Escanea el QR generado
 
 O para web:
 ```bash
@@ -243,7 +218,7 @@ npm run web
 | **Attendance Service** | 8003 | Procesamiento GPS y asistencias | http://localhost:8003 |
 | **Notification Service** | 8004 | Sistema de notificaciones | http://localhost:8004 |
 | **Web Dashboard** | 8080 | Panel administrativo | http://localhost:8080 |
-| **Mobile Simulator** | 19000 | App móvil (Expo) | http://localhost:19000 |
+| **Mobile Simulator** | 8081 | App móvil (Expo) | http://localhost:8081|
 
 ### Bases de Datos (Docker)
 | Base de Datos | Puerto | Usuario | Password |
@@ -297,7 +272,7 @@ Email: admin@test.com
 Password: Password123@
 
 # Profesor
-Email: maria.garcia@test.com
+Email: leonidas.zarate@test.com
 Password: Password123@
 
 # Estudiante
@@ -490,18 +465,4 @@ npm install
 4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Abrir Pull Request
 
-## 👥 Equipo
 
-**Taller 3 - Sistemas de Información**
-- Sistema de asistencia por geolocalización
-- Arquitectura de microservicios con FastAPI
-- Aplicación móvil con React Native/Expo
-- Dashboard administrativo con React
-
-## 📄 Licencia
-
-Este proyecto es para fines académicos.
-
----
-
-**🎯 Objetivo**: Demostrar dominio de arquitectura de microservicios, desarrollo full-stack, y sistemas de geolocalización en un sistema real de asistencia académica.

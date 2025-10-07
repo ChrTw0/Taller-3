@@ -79,25 +79,6 @@ services:
       timeout: 5s
       retries: 5
 
-  
-  # # Eureka Service Discovery (commented out - not using Spring Cloud)
-  # eureka-server:
-  #   build: ./eureka-server
-  #   container_name: geoattend-eureka
-  #   ports:
-  #     - "8761:8761"
-  #   networks:
-  #     - geoattend-network
-
-  # # Config Server (commented out - not using Spring Cloud)
-  # config-server:
-  #   build: ./config-server
-  #   container_name: geoattend-config
-  #   ports:
-  #     - "8888:8888"
-  #   networks:
-  #     - geoattend-network
-
   # User Service (FastAPI)
   user-service:
     build: ./user-service

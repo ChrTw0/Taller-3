@@ -18,7 +18,7 @@ database-init/
 
 ## 🚀 Uso Rápido (Quick Start)
 
-### Windows
+### Windows (CMD)
 
 ```bash
 # 1. Crear admin
@@ -42,89 +42,6 @@ chmod +x *.sh
 # 3. Poblar base de datos
 ./2-populate-db.sh
 ```
-
-## 📋 Proceso Completo Paso a Paso
-
-### Prerrequisitos
-
-✅ Docker y Docker Compose instalados
-✅ Python 3.11+ instalado
-✅ Node.js 18+ instalado
-✅ curl instalado
-
-### Paso 1: Levantar Bases de Datos
-
-```bash
-# Desde la raíz del proyecto (Taller3/)
-docker-compose up -d
-
-# Verificar que estén corriendo
-docker-compose ps
-```
-
-### Paso 2: Levantar Microservicios
-
-Abre **5 terminales** desde la raíz del proyecto:
-
-```bash
-# Terminal 1 - User Service
-cd user-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload
-
-# Terminal 2 - Course Service
-cd course-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8002 --reload
-
-# Terminal 3 - Attendance Service
-cd attendance-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8003 --reload
-
-# Terminal 4 - Notification Service
-cd notification-service
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8004 --reload
-
-# Terminal 5 - API Gateway
-cd api-gateway
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-**Espera** hasta ver `"Application startup complete"` en todos.
-
-### Paso 3: Crear Usuario Administrador
-
-```bash
-# Ir a la carpeta database-init
-cd database-init
-
-# Windows
-1-init-admin.bat
-
-# Linux/Mac
-./1-init-admin.sh
-```
-
-**Credenciales creadas:**
-- Email: `admin@test.com`
-- Password: `Password123!`
-- Código: `ADMIN001`
-
-### Paso 4: Poblar Base de Datos
-
-```bash
-# Windows
-2-populate-db.bat
-
-# Linux/Mac
-./2-populate-db.sh
-```
-
-**Datos creados:**
-- 6 Profesores (PROF001-PROF006)
-- 5 Estudiantes (EST001-EST005)
-- 8 Aulas con GPS
-- 7 Cursos académicos
-- 7 Horarios de clase
-- 13 Inscripciones
 
 ## 📊 Datos Creados
 
@@ -312,15 +229,3 @@ Si tienes problemas:
 3. Asegúrate de que los puertos 8000-8004 y 5433-5436 estén libres
 4. Verifica archivos `.env` en cada microservicio
 
-## 🎯 Siguiente Paso
-
-Una vez completada la inicialización:
-
-- 🌐 **Dashboard Web:** http://localhost:8080
-- 📱 **App Móvil:** `cd mobile-simulator/geoattend-mobile && npm start`
-- 📚 **API Docs:** http://localhost:8001/docs
-
----
-
-**Proyecto GeoAttend** - Sistema de Asistencia por Geolocalización
-**Taller 3 - Sistemas de Información**
