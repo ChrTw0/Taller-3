@@ -26,7 +26,7 @@ echo [1/8] Autenticacion...
 
 curl -s -X POST "%USER_SERVICE%/auth/login" ^
   -H "Content-Type: application/json" ^
-  -d "{\"email\":\"admin@test.com\",\"password\":\"Password123!\"}" > temp_login.json
+  -d "{\"email\":\"admin@test.com\",\"password\":\"Password123@\"}" > temp_login.json
 
 REM Extraer token del JSON (requiere jq o PowerShell)
 for /f "delims=" %%i in ('powershell -command "(Get-Content temp_login.json | ConvertFrom-Json).data.access_token"') do set TOKEN=%%i
@@ -50,68 +50,68 @@ echo   Creando profesor: PROF001 - Maria Garcia
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF001\",\"email\":\"maria.garcia@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Garcia\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF001\",\"email\":\"maria.garcia@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Garcia\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando profesor: PROF002 - Leonidas Zarate
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF002\",\"email\":\"leonidas.zarate@test.com\",\"first_name\":\"LEONIDAS BENITO\",\"last_name\":\"ZARATE OTAROLA\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF002\",\"email\":\"leonidas.zarate@test.com\",\"first_name\":\"LEONIDAS BENITO\",\"last_name\":\"ZARATE OTAROLA\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando profesor: PROF003 - Richard Zamora
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF003\",\"email\":\"richard.zamora@test.com\",\"first_name\":\"RICHARD ISMAEL\",\"last_name\":\"ZAMORA YANSI\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF003\",\"email\":\"richard.zamora@test.com\",\"first_name\":\"RICHARD ISMAEL\",\"last_name\":\"ZAMORA YANSI\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando profesor: PROF004 - Hilario Aradiel
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF004\",\"email\":\"hilario.aradiel@test.com\",\"first_name\":\"HILARIO\",\"last_name\":\"ARADIEL CASTANEDA\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF004\",\"email\":\"hilario.aradiel@test.com\",\"first_name\":\"HILARIO\",\"last_name\":\"ARADIEL CASTANEDA\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando profesor: PROF005 - Javier Canchano
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF005\",\"email\":\"javier.canchano@test.com\",\"first_name\":\"JAVIER TOLENTINO\",\"last_name\":\"CANCHANO CARO\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF005\",\"email\":\"javier.canchano@test.com\",\"first_name\":\"JAVIER TOLENTINO\",\"last_name\":\"CANCHANO CARO\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando profesor: PROF006 - Carlos Ramos
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF006\",\"email\":\"carlos.ramos@test.com\",\"first_name\":\"CARLOS NELSON\",\"last_name\":\"RAMOS MONTES\",\"role\":\"teacher\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"PROF006\",\"email\":\"carlos.ramos@test.com\",\"first_name\":\"CARLOS NELSON\",\"last_name\":\"RAMOS MONTES\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
 
 REM Estudiantes
 echo   Creando estudiante: EST001 - Juan Perez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST001\",\"email\":\"juan.perez@test.com\",\"first_name\":\"Juan\",\"last_name\":\"Perez\",\"role\":\"student\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"EST001\",\"email\":\"juan.perez@test.com\",\"first_name\":\"Juan\",\"last_name\":\"Perez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando estudiante: EST002 - Maria Lopez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST002\",\"email\":\"maria.lopez@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Lopez\",\"role\":\"student\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"EST002\",\"email\":\"maria.lopez@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Lopez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando estudiante: EST003 - Pedro Gonzalez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST003\",\"email\":\"pedro.gonzalez@test.com\",\"first_name\":\"Pedro\",\"last_name\":\"Gonzalez\",\"role\":\"student\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"EST003\",\"email\":\"pedro.gonzalez@test.com\",\"first_name\":\"Pedro\",\"last_name\":\"Gonzalez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando estudiante: EST004 - Ana Martinez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST004\",\"email\":\"ana.martinez@test.com\",\"first_name\":\"Ana\",\"last_name\":\"Martinez\",\"role\":\"student\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"EST004\",\"email\":\"ana.martinez@test.com\",\"first_name\":\"Ana\",\"last_name\":\"Martinez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
 
 echo   Creando estudiante: EST005 - Carlos Rodriguez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST005\",\"email\":\"carlos.rodriguez@test.com\",\"first_name\":\"Carlos\",\"last_name\":\"Rodriguez\",\"role\":\"student\",\"password\":\"Password123!\"}" > nul
+  -d "{\"code\":\"EST005\",\"email\":\"carlos.rodriguez@test.com\",\"first_name\":\"Carlos\",\"last_name\":\"Rodriguez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
 
 echo Usuarios creados
 echo.
@@ -181,43 +181,43 @@ echo   Creando curso: SI807V
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"SI807V\",\"name\":\"Sistemas de Inteligencia de Negocios\",\"description\":\"Curso de postgrado que aborda metodologias y tecnologias para la implementacion de sistemas de inteligencia de negocios en organizaciones.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":8,\"teacher_code\":\"PROF006\"}" > nul
+  -d "{\"code\":\"SI807V\",\"name\":\"Sistemas de Inteligencia de Negocios\",\"description\":\"Curso de postgrado que aborda metodologias y tecnologias para la implementacion de sistemas de inteligencia de negocios en organizaciones.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":7,\"teacher_code\":\"PROF006\"}" > nul
 
 echo   Creando curso: GE801U
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"GE801U\",\"name\":\"Planeamiento y Gestion Estrategica\",\"description\":\"Curso que desarrolla competencias en planeamiento estrategico, analisis organizacional y gestion de proyectos estrategicos.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":40,\"detection_radius\":\"2.50\",\"teacher_id\":4,\"teacher_code\":\"PROF002\"}" > nul
+  -d "{\"code\":\"GE801U\",\"name\":\"Planeamiento y Gestion Estrategica\",\"description\":\"Curso que desarrolla competencias en planeamiento estrategico, analisis organizacional y gestion de proyectos estrategicos.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":40,\"detection_radius\":\"2.50\",\"teacher_id\":3,\"teacher_code\":\"PROF002\"}" > nul
 
 echo   Creando curso: GE803U
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"GE803U\",\"name\":\"Sistemas Analiticos\",\"description\":\"Curso enfocado en el diseno e implementacion de sistemas analiticos para la toma de decisiones basada en datos.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":4,\"teacher_code\":\"PROF002\"}" > nul
+  -d "{\"code\":\"GE803U\",\"name\":\"Sistemas Analiticos\",\"description\":\"Curso enfocado en el diseno e implementacion de sistemas analiticos para la toma de decisiones basada en datos.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":3,\"teacher_code\":\"PROF002\"}" > nul
 
 echo   Creando curso: SI150U
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"SI150U\",\"name\":\"Analitica de Datos\",\"description\":\"Curso que introduce tecnicas de analisis de datos, visualizacion, estadistica aplicada y machine learning.\",\"credits\":3,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":40,\"detection_radius\":\"2.50\",\"teacher_id\":5,\"teacher_code\":\"PROF003\"}" > nul
+  -d "{\"code\":\"SI150U\",\"name\":\"Analitica de Datos\",\"description\":\"Curso que introduce tecnicas de analisis de datos, visualizacion, estadistica aplicada y machine learning.\",\"credits\":3,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":40,\"detection_radius\":\"2.50\",\"teacher_id\":4,\"teacher_code\":\"PROF003\"}" > nul
 
 echo   Creando curso: SI801V
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"SI801V\",\"name\":\"Modelo del Sistema Viable\",\"description\":\"Curso de postgrado sobre cibernetica organizacional y el Modelo del Sistema Viable de Stafford Beer.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":30,\"detection_radius\":\"2.50\",\"teacher_id\":6,\"teacher_code\":\"PROF004\"}" > nul
+  -d "{\"code\":\"SI801V\",\"name\":\"Modelo del Sistema Viable\",\"description\":\"Curso de postgrado sobre cibernetica organizacional y el Modelo del Sistema Viable de Stafford Beer.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":30,\"detection_radius\":\"2.50\",\"teacher_id\":5,\"teacher_code\":\"PROF004\"}" > nul
 
 echo   Creando curso: SI805V
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"SI805V\",\"name\":\"Integracion de Sistemas\",\"description\":\"Curso sobre arquitecturas de integracion, APIs, microservicios y patrones de integracion empresarial.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":7,\"teacher_code\":\"PROF005\"}" > nul
+  -d "{\"code\":\"SI805V\",\"name\":\"Integracion de Sistemas\",\"description\":\"Curso sobre arquitecturas de integracion, APIs, microservicios y patrones de integracion empresarial.\",\"credits\":4,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":35,\"detection_radius\":\"2.50\",\"teacher_id\":6,\"teacher_code\":\"PROF005\"}" > nul
 
 echo   Creando curso: SI806V
 curl -s -X POST "%COURSE_SERVICE%/courses/" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"SI806V\",\"name\":\"Desarrollo Adaptativo e Integrado del SW\",\"description\":\"Curso sobre metodologias agiles y desarrollo de software integrado\",\"credits\":2,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":30,\"detection_radius\":\"2.50\",\"teacher_id\":7,\"teacher_code\":\"PROF005\"}" > nul
+  -d "{\"code\":\"SI806V\",\"name\":\"Desarrollo Adaptativo e Integrado del SW\",\"description\":\"Curso sobre metodologias agiles y desarrollo de software integrado\",\"credits\":2,\"academic_year\":\"2025\",\"semester\":\"A\",\"max_students\":30,\"detection_radius\":\"2.50\",\"teacher_id\":6,\"teacher_code\":\"PROF005\"}" > nul
 
 echo Cursos creados
 echo.
@@ -245,20 +245,20 @@ REM ============================================================================
 echo [6/8] Creando inscripciones...
 
 echo   Inscribiendo estudiante EST001 en cursos...
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/2" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/3" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/4" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/5" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/6" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/7" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":1,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/2" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/3" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/4" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/5" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/6" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/7" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":8,\"student_code\":\"EST001\"}" > nul
 
 echo   Inscribiendo otros estudiantes...
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":2,\"student_code\":\"EST002\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":3,\"student_code\":\"EST003\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/2" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":2,\"student_code\":\"EST002\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/3" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":4,\"student_code\":\"EST004\"}" > nul
-curl -s -X POST "%COURSE_SERVICE%/enrollments/course/4" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":5,\"student_code\":\"EST005\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":9,\"student_code\":\"EST002\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/1" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":10,\"student_code\":\"EST003\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/2" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":9,\"student_code\":\"EST002\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/3" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":11,\"student_code\":\"EST004\"}" > nul
+curl -s -X POST "%COURSE_SERVICE%/enrollments/course/4" -H "Authorization: Bearer %TOKEN%" -H "Content-Type: application/json" -d "{\"student_id\":12,\"student_code\":\"EST005\"}" > nul
 
 echo Inscripciones creadas
 echo.
@@ -280,11 +280,11 @@ echo ===========================================================================
 echo.
 echo   ADMINISTRADOR:
 echo     Email:    admin@test.com
-echo     Password: Password123!
+echo     Password: Password123@
 echo.
 echo   PROFESORES:
 echo     Email:    maria.garcia@test.com (y otros PROF*@test.com)
-echo     Password: Password123!
+echo     Password: Password123@
 echo.
 echo   ESTUDIANTES:
 echo     Email:    juan.perez@test.com (EST001)
@@ -292,13 +292,13 @@ echo     Email:    maria.lopez@test.com (EST002)
 echo     Email:    pedro.gonzalez@test.com (EST003)
 echo     Email:    ana.martinez@test.com (EST004)
 echo     Email:    carlos.rodriguez@test.com (EST005)
-echo     Password: Password123!
+echo     Password: Password123@
 echo.
 echo ============================================================================
 
 echo.
 echo ============================================================================
-echo   Base de datos poblada exitosamente!
+echo   Base de datos poblada exitosamente
 echo ============================================================================
 echo.
 

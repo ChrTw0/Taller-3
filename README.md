@@ -294,15 +294,15 @@ npm run web
 ```bash
 # Administrador
 Email: admin@test.com
-Password: Password123!
+Password: Password123@
 
 # Profesor
-Email: teacher@test.com
-Password: Password123!
+Email: maria.garcia@test.com
+Password: Password123@
 
 # Estudiante
-Email: student@test.com
-Password: Password123!
+Email: juan.perez@test.com
+Password: Password123@
 ```
 
 ## 🧪 Testing
