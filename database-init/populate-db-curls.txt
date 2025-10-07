@@ -1,0 +1,617 @@
+# ============================================================================
+# GeoAttend - Comandos cURL para Poblar Base de Datos
+# ============================================================================
+# Copia y pega estos comandos en tu terminal para crear datos de prueba
+# IMPORTANTE: Reemplaza {TOKEN} con el token JWT que obtengas del login
+# ============================================================================
+
+# ============================================================================
+# 1. LOGIN COMO ADMIN - Obtener Token
+# ============================================================================
+
+curl -X POST http://localhost:8001/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@test.com",
+    "password": "Password123!"
+  }'
+
+# Copia el access_token de la respuesta y reemplázalo en {TOKEN} en los siguientes comandos
+
+# ============================================================================
+# 2. CREAR PROFESORES
+# ============================================================================
+
+# Profesor PROF001 - Maria Garcia
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF001",
+    "email": "maria.garcia@test.com",
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# Profesor PROF002 - Leonidas Zarate
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF002",
+    "email": "leonidas.zarate@test.com",
+    "first_name": "LEONIDAS BENITO",
+    "last_name": "ZARATE OTAROLA",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# Profesor PROF003 - Richard Zamora
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF003",
+    "email": "richard.zamora@test.com",
+    "first_name": "RICHARD ISMAEL",
+    "last_name": "ZAMORA YANSI",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# Profesor PROF004 - Hilario Aradiel
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF004",
+    "email": "hilario.aradiel@test.com",
+    "first_name": "HILARIO",
+    "last_name": "ARADIEL CASTANEDA",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# Profesor PROF005 - Javier Canchano
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF005",
+    "email": "javier.canchano@test.com",
+    "first_name": "JAVIER TOLENTINO",
+    "last_name": "CANCHANO CARO",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# Profesor PROF006 - Carlos Ramos
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "PROF006",
+    "email": "carlos.ramos@test.com",
+    "first_name": "CARLOS NELSON",
+    "last_name": "RAMOS MONTES",
+    "role": "teacher",
+    "password": "Password123!"
+  }'
+
+# ============================================================================
+# 3. CREAR ESTUDIANTES
+# ============================================================================
+
+# Estudiante EST001 - Juan Perez
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "EST001",
+    "email": "juan.perez@test.com",
+    "first_name": "Juan",
+    "last_name": "Perez",
+    "role": "student",
+    "password": "Password123!"
+  }'
+
+# Estudiante EST002 - Maria Lopez
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "EST002",
+    "email": "maria.lopez@test.com",
+    "first_name": "Maria",
+    "last_name": "Lopez",
+    "role": "student",
+    "password": "Password123!"
+  }'
+
+# Estudiante EST003 - Pedro Gonzalez
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "EST003",
+    "email": "pedro.gonzalez@test.com",
+    "first_name": "Pedro",
+    "last_name": "Gonzalez",
+    "role": "student",
+    "password": "Password123!"
+  }'
+
+# Estudiante EST004 - Ana Martinez
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "EST004",
+    "email": "ana.martinez@test.com",
+    "first_name": "Ana",
+    "last_name": "Martinez",
+    "role": "student",
+    "password": "Password123!"
+  }'
+
+# Estudiante EST005 - Carlos Rodriguez
+curl -X POST http://localhost:8001/api/v1/auth/register \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "EST005",
+    "email": "carlos.rodriguez@test.com",
+    "first_name": "Carlos",
+    "last_name": "Rodriguez",
+    "role": "student",
+    "password": "Password123!"
+  }'
+
+# ============================================================================
+# 4. CREAR AULAS
+# ============================================================================
+
+# Aula FIIS-301
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "FIIS-301",
+    "name": "Aula 301 - Edificio FIIS",
+    "building": "Facultad de Ingenieria Industrial y de Sistemas",
+    "room_number": "301",
+    "floor": 3,
+    "latitude": "-12.0463740",
+    "longitude": "-77.0427930",
+    "gps_radius": "50.00",
+    "capacity": 40,
+    "equipment": "Proyector, Pizarra digital, Sistema de audio"
+  }'
+
+# Aula FIIS-302
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "FIIS-302",
+    "name": "Aula 302 - Edificio FIIS",
+    "building": "Facultad de Ingenieria Industrial y de Sistemas",
+    "room_number": "302",
+    "floor": 3,
+    "latitude": "-12.0155284",
+    "longitude": "-77.0503485",
+    "gps_radius": "10.00",
+    "capacity": 35,
+    "equipment": "Proyector, Pizarra acrilica"
+  }'
+
+# Aula FIIS-401
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "FIIS-401",
+    "name": "Aula 401 - Edificio FIIS",
+    "building": "Facultad de Ingenieria Industrial y de Sistemas",
+    "room_number": "401",
+    "floor": 4,
+    "latitude": "-12.0465000",
+    "longitude": "-77.0429000",
+    "gps_radius": "50.00",
+    "capacity": 30,
+    "equipment": "Proyector, Pizarra acrilica, Aire acondicionado"
+  }'
+
+# Aula FIIS-LAB201
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "FIIS-LAB201",
+    "name": "Laboratorio de Sistemas 201",
+    "building": "Facultad de Ingenieria Industrial y de Sistemas",
+    "room_number": "LAB-201",
+    "floor": 2,
+    "latitude": "-12.0155284",
+    "longitude": "-77.0493508",
+    "gps_radius": "10.00",
+    "capacity": 25,
+    "equipment": "30 Computadoras, Proyector, Pizarra digital, Servidor local"
+  }'
+
+# Aula A-301
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "A-301",
+    "name": "Aula 301 - Edificio A",
+    "building": "Edificio A",
+    "room_number": "301",
+    "floor": 3,
+    "latitude": "-12.0153709",
+    "longitude": "-77.0503292",
+    "gps_radius": "10.00",
+    "capacity": 40
+  }'
+
+# Aula A-302
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "A-302",
+    "name": "Aula 302 - Edificio A",
+    "building": "Edificio A",
+    "room_number": "302",
+    "floor": 3,
+    "latitude": "-12.0464000",
+    "longitude": "-77.0428000",
+    "gps_radius": "50.00",
+    "capacity": 35
+  }'
+
+# Aula B-201
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "B-201",
+    "name": "Aula 201 - Edificio B",
+    "building": "Edificio B",
+    "room_number": "201",
+    "floor": 2,
+    "latitude": "-12.0465000",
+    "longitude": "-77.0429000",
+    "gps_radius": "50.00",
+    "capacity": 30
+  }'
+
+# Aula LAB-101
+curl -X POST http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "LAB-101",
+    "name": "Laboratorio 101",
+    "building": "Edificio C",
+    "room_number": "101",
+    "floor": 1,
+    "latitude": "-12.0155921",
+    "longitude": "-77.0493344",
+    "gps_radius": "10.00",
+    "capacity": 25
+  }'
+
+# ============================================================================
+# 5. CREAR CURSOS
+# ============================================================================
+# NOTA: Los teacher_id pueden variar según el orden de creación de usuarios
+# Asegúrate de verificar los IDs correctos consultando GET /users/
+# ============================================================================
+
+# Curso SI807V - Sistemas de Inteligencia de Negocios
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "SI807V",
+    "name": "Sistemas de Inteligencia de Negocios",
+    "description": "Curso de postgrado que aborda metodologias y tecnologias para la implementacion de sistemas de inteligencia de negocios en organizaciones.",
+    "credits": 4,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 35,
+    "detection_radius": "2.50",
+    "teacher_id": 8,
+    "teacher_code": "PROF006"
+  }'
+
+# Curso GE801U - Planeamiento y Gestión Estratégica
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "GE801U",
+    "name": "Planeamiento y Gestion Estrategica",
+    "description": "Curso que desarrolla competencias en planeamiento estrategico, analisis organizacional y gestion de proyectos estrategicos.",
+    "credits": 4,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 40,
+    "detection_radius": "2.50",
+    "teacher_id": 4,
+    "teacher_code": "PROF002"
+  }'
+
+# Curso GE803U - Sistemas Analíticos
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "GE803U",
+    "name": "Sistemas Analiticos",
+    "description": "Curso enfocado en el diseno e implementacion de sistemas analiticos para la toma de decisiones basada en datos.",
+    "credits": 4,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 35,
+    "detection_radius": "2.50",
+    "teacher_id": 4,
+    "teacher_code": "PROF002"
+  }'
+
+# Curso SI150U - Analítica de Datos
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "SI150U",
+    "name": "Analitica de Datos",
+    "description": "Curso que introduce tecnicas de analisis de datos, visualizacion, estadistica aplicada y machine learning.",
+    "credits": 3,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 40,
+    "detection_radius": "2.50",
+    "teacher_id": 5,
+    "teacher_code": "PROF003"
+  }'
+
+# Curso SI801V - Modelo del Sistema Viable
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "SI801V",
+    "name": "Modelo del Sistema Viable",
+    "description": "Curso de postgrado sobre cibernetica organizacional y el Modelo del Sistema Viable de Stafford Beer.",
+    "credits": 4,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 30,
+    "detection_radius": "2.50",
+    "teacher_id": 6,
+    "teacher_code": "PROF004"
+  }'
+
+# Curso SI805V - Integración de Sistemas
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "SI805V",
+    "name": "Integracion de Sistemas",
+    "description": "Curso sobre arquitecturas de integracion, APIs, microservicios y patrones de integracion empresarial.",
+    "credits": 4,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 35,
+    "detection_radius": "2.50",
+    "teacher_id": 7,
+    "teacher_code": "PROF005"
+  }'
+
+# Curso SI806V - Desarrollo Adaptativo e Integrado del SW
+curl -X POST http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "SI806V",
+    "name": "Desarrollo Adaptativo e Integrado del SW",
+    "description": "Curso sobre metodologias agiles y desarrollo de software integrado",
+    "credits": 2,
+    "academic_year": "2025",
+    "semester": "A",
+    "max_students": 30,
+    "detection_radius": "2.50",
+    "teacher_id": 7,
+    "teacher_code": "PROF005"
+  }'
+
+# ============================================================================
+# 6. CREAR HORARIOS PARA LOS CURSOS
+# ============================================================================
+# NOTA: Los course_id y classroom_id pueden variar
+# Verifica los IDs correctos consultando GET /courses/ y GET /classrooms/
+# day_of_week: 0=Lunes, 1=Martes, 2=Miércoles, 3=Jueves, 4=Viernes, 5=Sábado, 6=Domingo
+# ============================================================================
+
+# Horario para SI807V (curso_id: 1) - Lunes 8-10am en FIIS-301 (classroom_id: 1)
+curl -X POST http://localhost:8002/api/v1/schedules/course/1 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 0,
+    "start_time": "08:00:00",
+    "end_time": "10:00:00",
+    "classroom_id": 1
+  }'
+
+# Horario para GE801U (curso_id: 2) - Martes 2-4pm en FIIS-302 (classroom_id: 2)
+curl -X POST http://localhost:8002/api/v1/schedules/course/2 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 1,
+    "start_time": "14:00:00",
+    "end_time": "16:00:00",
+    "classroom_id": 2
+  }'
+
+# Horario para GE803U (curso_id: 3) - Miércoles 10am-12pm en FIIS-401 (classroom_id: 3)
+curl -X POST http://localhost:8002/api/v1/schedules/course/3 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 2,
+    "start_time": "10:00:00",
+    "end_time": "12:00:00",
+    "classroom_id": 3
+  }'
+
+# Horario para SI150U (curso_id: 4) - Jueves 4-6pm en FIIS-LAB201 (classroom_id: 4)
+curl -X POST http://localhost:8002/api/v1/schedules/course/4 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 3,
+    "start_time": "16:00:00",
+    "end_time": "18:00:00",
+    "classroom_id": 4
+  }'
+
+# Horario para SI801V (curso_id: 5) - Viernes 8am-12pm en A-301 (classroom_id: 5)
+curl -X POST http://localhost:8002/api/v1/schedules/course/5 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 4,
+    "start_time": "08:00:00",
+    "end_time": "12:00:00",
+    "classroom_id": 5
+  }'
+
+# Horario para SI805V (curso_id: 6) - Jueves 6-10pm en A-302 (classroom_id: 6)
+curl -X POST http://localhost:8002/api/v1/schedules/course/6 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 3,
+    "start_time": "18:00:00",
+    "end_time": "22:00:00",
+    "classroom_id": 6
+  }'
+
+# Horario para SI806V (curso_id: 7) - Sábado 9am-1pm en B-201 (classroom_id: 7)
+curl -X POST http://localhost:8002/api/v1/schedules/course/7 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "day_of_week": 5,
+    "start_time": "09:00:00",
+    "end_time": "13:00:00",
+    "classroom_id": 7
+  }'
+
+# ============================================================================
+# 7. CREAR INSCRIPCIONES (ENROLLMENTS)
+# ============================================================================
+# NOTA: Los student_id y course_id pueden variar
+# Verifica los IDs correctos consultando las APIs
+# ============================================================================
+
+# Inscribir EST001 (student_id: 1) en todos los cursos
+curl -X POST http://localhost:8002/api/v1/enrollments/course/1 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/2 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/3 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/4 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/5 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/6 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/7 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 1, "student_code": "EST001"}'
+
+# Inscribir EST002 (student_id: 2) en algunos cursos
+curl -X POST http://localhost:8002/api/v1/enrollments/course/1 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 2, "student_code": "EST002"}'
+
+curl -X POST http://localhost:8002/api/v1/enrollments/course/2 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 2, "student_code": "EST002"}'
+
+# Inscribir EST003 (student_id: 3)
+curl -X POST http://localhost:8002/api/v1/enrollments/course/1 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 3, "student_code": "EST003"}'
+
+# Inscribir EST004 (student_id: 4)
+curl -X POST http://localhost:8002/api/v1/enrollments/course/3 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 4, "student_code": "EST004"}'
+
+# Inscribir EST005 (student_id: 5)
+curl -X POST http://localhost:8002/api/v1/enrollments/course/4 \
+  -H "Authorization: Bearer {TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"student_id": 5, "student_code": "EST005"}'
+
+# ============================================================================
+# 8. VERIFICACIÓN - Consultar datos creados
+# ============================================================================
+
+# Ver todos los usuarios
+curl -X GET http://localhost:8001/api/v1/users/ \
+  -H "Authorization: Bearer {TOKEN}"
+
+# Ver todos los cursos
+curl -X GET http://localhost:8002/api/v1/courses/ \
+  -H "Authorization: Bearer {TOKEN}"
+
+# Ver todas las aulas
+curl -X GET http://localhost:8002/api/v1/classrooms/ \
+  -H "Authorization: Bearer {TOKEN}"
+
+# Ver todas las inscripciones
+curl -X GET http://localhost:8002/api/v1/enrollments/ \
+  -H "Authorization: Bearer {TOKEN}"
+
+# Ver horarios de un curso específico (ejemplo: curso_id=1)
+curl -X GET http://localhost:8002/api/v1/schedules/course/1 \
+  -H "Authorization: Bearer {TOKEN}"
+
+# ============================================================================
+# FIN - Base de datos poblada
+# ============================================================================

@@ -27,7 +27,7 @@ class AttendanceServiceSettings(BaseSettings):
 
     # GPS Configuration
     max_distance_meters: float = Field(default=2.0, env="MAX_DISTANCE_METERS")
-    gps_accuracy_threshold: float = Field(default=10.0, env="GPS_ACCURACY_THRESHOLD")  # meters
+    gps_accuracy_threshold: float = Field(default=20.0, env="GPS_ACCURACY_THRESHOLD")  # meters - increased for mobile GPS
     earth_radius_km: float = Field(default=6371.0, env="EARTH_RADIUS_KM")  # Earth radius in km
 
     # Attendance Rules

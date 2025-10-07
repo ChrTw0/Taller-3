@@ -178,7 +178,39 @@ cd api-gateway
 python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### 7. Iniciar Frontend Web
+### 7. 🗄️ Inicializar Base de Datos (Primera Vez)
+
+Si estás iniciando con bases de datos vacías, ejecuta los scripts de inicialización:
+
+```bash
+cd database-init
+
+# Windows - Paso 1: Crear admin
+1-init-admin.bat
+
+# Windows - Paso 2: Poblar datos
+2-populate-db.bat
+
+# Linux/Mac - Paso 1: Crear admin
+chmod +x *.sh
+./1-init-admin.sh
+
+# Linux/Mac - Paso 2: Poblar datos
+./2-populate-db.sh
+```
+
+**Datos creados:**
+- 1 Administrador (admin@test.com / Password123!)
+- 6 Profesores
+- 5 Estudiantes
+- 8 Aulas con GPS
+- 7 Cursos
+- 7 Horarios
+- 13 Inscripciones
+
+📖 **Documentación completa:** Ver `database-init/README.md`
+
+### 8. Iniciar Frontend Web
 
 ```bash
 cd web-dashboard
@@ -188,7 +220,7 @@ npm run dev
 
 Accede a: **http://localhost:8080**
 
-### 8. Iniciar Aplicación Móvil (Simulador)
+### 9. Iniciar Aplicación Móvil (Simulador)
 
 ```bash
 cd mobile-simulator/geoattend-mobile

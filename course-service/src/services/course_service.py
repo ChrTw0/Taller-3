@@ -214,6 +214,9 @@ class CourseService:
     @staticmethod
     async def get_course_coordinates(db: AsyncSession, course_id: int) -> dict:
         """Get course coordinates for Attendance Service - CRITICAL for attendance-service."""
+        from sqlalchemy import select
+        from ..models.course import Classroom
+
         course = await CourseService.get_course_by_id(db, course_id, include_details=True)
         if not course:
             raise HTTPException(
@@ -222,16 +225,43 @@ class CourseService:
             )
 
         classrooms_data = []
-        # Iterate through course_classroom assignments to get classrooms
+        classroom_ids_seen = set()
+
+        # First, get classrooms from schedules (used by web dashboard)
+        for schedule in course.schedules:
+            if schedule.is_active and schedule.classroom_id:
+                if schedule.classroom_id not in classroom_ids_seen:
+                    classroom_ids_seen.add(schedule.classroom_id)
+                    # Load the classroom details
+                    classroom_result = await db.execute(
+                        select(Classroom).where(Classroom.id == schedule.classroom_id)
+                    )
+                    classroom = classroom_result.scalar_one_or_none()
+                    if classroom and classroom.is_active:
+                        classrooms_data.append({
+                            "id": classroom.id,
+                            "latitude": float(classroom.latitude),
+                            "longitude": float(classroom.longitude),
+                            "building": classroom.building,
+                            "room_number": classroom.room_number,
+                            "name": classroom.name,
+                            "gps_radius": float(classroom.gps_radius)
+                        })
+
+        # Also check course_classroom assignments (for backward compatibility)
         for assignment in course.classroom_assignments:
             if assignment.is_active and assignment.classroom and assignment.classroom.is_active:
-                classrooms_data.append({
-                    "id": assignment.classroom.id,
-                    "latitude": float(assignment.classroom.latitude),
-                    "longitude": float(assignment.classroom.longitude),
-                    "building": assignment.classroom.building,
-                    "room_number": assignment.classroom.room_number
-                })
+                if assignment.classroom.id not in classroom_ids_seen:
+                    classroom_ids_seen.add(assignment.classroom.id)
+                    classrooms_data.append({
+                        "id": assignment.classroom.id,
+                        "latitude": float(assignment.classroom.latitude),
+                        "longitude": float(assignment.classroom.longitude),
+                        "building": assignment.classroom.building,
+                        "room_number": assignment.classroom.room_number,
+                        "name": assignment.classroom.name,
+                        "gps_radius": float(assignment.classroom.gps_radius)
+                    })
 
         if not classrooms_data:
             logger.warning(f"Course {course_id} has no active classrooms assigned")

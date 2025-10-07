@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
-import { enrollmentApi, courseApi, scheduleApi } from '../services/api';
+import { enrollmentApi, courseApi, scheduleApi, attendanceApi } from '../services/api';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { Course, Enrollment } from '../types';
 
@@ -17,6 +17,7 @@ export default function CoursesScreen({ navigation }: any) {
   const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [schedules, setSchedules] = useState<Map<number, any[]>>(new Map());
+  const [attendanceToday, setAttendanceToday] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -24,10 +25,22 @@ export default function CoursesScreen({ navigation }: any) {
     loadCourses();
   }, []);
 
+  // Recargar cuando se vuelva a esta pantalla (después de registrar asistencia)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('📱 Pantalla enfocada, recargando cursos...');
+      loadCourses();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const loadCourses = async () => {
     if (!user) return;
 
     try {
+      console.log('📚 Cargando cursos y asistencia...');
+
       // Obtener inscripciones del estudiante
       const enrollments: Enrollment[] = await enrollmentApi.getByStudent(user.id);
       const activeEnrollments = enrollments.filter(e => e.status === 'active');
@@ -52,6 +65,31 @@ export default function CoursesScreen({ navigation }: any) {
         }
       }
       setSchedules(schedulesMap);
+
+      // Cargar asistencia del día de hoy
+      try {
+        const attendanceResponse = await attendanceApi.getByUser(user.id, 100);
+        const today = new Date().toISOString().split('T')[0]; // "2025-10-07"
+
+        console.log(`📅 Fecha de hoy: ${today}`);
+        console.log(`📋 Total registros: ${attendanceResponse.data.length}`);
+
+        const coursesWithAttendanceToday = new Set<number>();
+        attendanceResponse.data.forEach((record: any) => {
+          const recordDate = record.created_at.split('T')[0];
+          console.log(`  📝 Registro: course_id=${record.course_id}, fecha=${recordDate}, status=${record.status}`);
+
+          if (recordDate === today && record.status === 'present') {
+            coursesWithAttendanceToday.add(record.course_id);
+            console.log(`    ✅ Agregado curso ${record.course_id} a la lista de asistencia de hoy`);
+          }
+        });
+
+        setAttendanceToday(coursesWithAttendanceToday);
+        console.log(`✅ Asistencia registrada hoy en ${coursesWithAttendanceToday.size} curso(s):`, Array.from(coursesWithAttendanceToday));
+      } catch (error) {
+        console.error('❌ Error loading attendance:', error);
+      }
     } catch (error) {
       console.error('Error loading courses:', error);
     } finally {
@@ -75,6 +113,7 @@ export default function CoursesScreen({ navigation }: any) {
 
   const renderCourseCard = ({ item }: { item: Course }) => {
     const courseSchedules = schedules.get(item.id) || [];
+    const hasAttendanceToday = attendanceToday.has(item.id);
 
     return (
     <View
@@ -134,11 +173,25 @@ export default function CoursesScreen({ navigation }: any) {
 
       <View style={styles.cardFooter}>
         <TouchableOpacity
-          style={styles.attendButton}
-          onPress={() => navigation.navigate('AttendanceCapture', { course: item })}
+          style={[
+            styles.attendButton,
+            hasAttendanceToday && styles.attendButtonDisabled
+          ]}
+          onPress={() => {
+            if (!hasAttendanceToday) {
+              navigation.navigate('AttendanceCapture', { course: item });
+            }
+          }}
+          disabled={hasAttendanceToday}
         >
-          <MaterialIcons name="check-circle" size={20} color="#FFFFFF" />
-          <Text style={styles.attendButtonText}>Registrar Asistencia</Text>
+          <MaterialIcons
+            name={hasAttendanceToday ? "check-circle" : "location-on"}
+            size={20}
+            color="#FFFFFF"
+          />
+          <Text style={styles.attendButtonText}>
+            {hasAttendanceToday ? 'Asistencia Registrada' : 'Registrar Asistencia'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -273,6 +326,10 @@ const styles = StyleSheet.create({
     padding: 14,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  attendButtonDisabled: {
+    backgroundColor: '#10B981',
+    opacity: 0.8,
   },
   attendButtonText: {
     color: '#FFFFFF',

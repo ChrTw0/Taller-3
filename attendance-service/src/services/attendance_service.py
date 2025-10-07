@@ -391,3 +391,104 @@ class AttendanceService:
             "attendance_rate": round(attendance_rate, 2),
             "punctuality_rate": round(punctuality_rate, 2)
         }
+
+    async def mark_absences_for_session(
+        self,
+        db: AsyncSession,
+        course_id: int,
+        schedule_id: int,
+        class_date: datetime
+    ) -> dict:
+        """
+        Mark students as absent if they didn't register attendance for this session.
+        Should be called after class ends.
+        """
+        from sqlalchemy import select, and_
+        from ..models.attendance import AttendanceRecord
+        from decimal import Decimal
+
+        logger.info(f"📋 Processing absences for course {course_id}, schedule {schedule_id}, date {class_date}")
+
+        # 1. Get enrolled students from course-service
+        try:
+            enrollments_data = await self.http_client.get_course_enrollments(course_id)
+            if not enrollments_data:
+                logger.warning(f"No enrollments found for course {course_id}")
+                return {
+                    "course_id": course_id,
+                    "schedule_id": schedule_id,
+                    "class_date": class_date.isoformat(),
+                    "total_enrolled": 0,
+                    "already_registered": 0,
+                    "marked_absent": 0,
+                    "absent_students": []
+                }
+
+            enrolled_students = enrollments_data.get("enrollments", [])
+            total_enrolled = len(enrolled_students)
+            logger.info(f"📚 Found {total_enrolled} enrolled students")
+
+        except Exception as e:
+            logger.error(f"Error fetching enrollments: {e}")
+            raise
+
+        # 2. Get students who already have attendance for this date
+        class_date_only = class_date.date()
+        existing_records = await db.execute(
+            select(AttendanceRecord).where(
+                and_(
+                    AttendanceRecord.course_id == course_id,
+                    AttendanceRecord.class_date == class_date_only
+                )
+            )
+        )
+        existing_records_list = existing_records.scalars().all()
+        students_with_attendance = {record.user_id for record in existing_records_list}
+
+        logger.info(f"✅ {len(students_with_attendance)} students already have attendance")
+
+        # 3. Mark absent students who didn't register
+        absent_students = []
+        marked_count = 0
+
+        for enrollment in enrolled_students:
+            user_id = enrollment.get("student_id")
+            user_code = enrollment.get("student_code", "")
+
+            if user_id not in students_with_attendance:
+                # Create absent record
+                absent_record = AttendanceRecord(
+                    user_id=user_id,
+                    user_code=user_code,
+                    course_id=course_id,
+                    course_code="",
+                    status=AttendanceStatus.ABSENT,
+                    source=AttendanceSource.SYSTEM_AUTO,
+                    class_date=class_date_only,
+                    is_late=False,
+                    created_by="system_auto"
+                )
+
+                db.add(absent_record)
+                marked_count += 1
+                absent_students.append({
+                    "user_id": user_id,
+                    "user_code": user_code
+                })
+
+                logger.info(f"❌ Marked absent: user_id={user_id}, user_code={user_code}")
+
+        # Commit all absences
+        if marked_count > 0:
+            await db.commit()
+            logger.info(f"💾 Committed {marked_count} absence records")
+
+        return {
+            "course_id": course_id,
+            "schedule_id": schedule_id,
+            "class_date": class_date.isoformat(),
+            "total_enrolled": total_enrolled,
+            "already_registered": len(students_with_attendance),
+            "marked_absent": marked_count,
+            "absent_students": absent_students
+        }

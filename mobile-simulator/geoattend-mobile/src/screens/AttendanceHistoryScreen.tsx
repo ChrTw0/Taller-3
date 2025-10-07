@@ -25,23 +25,39 @@ export default function AttendanceHistoryScreen() {
   }, []);
 
   const loadData = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('❌ No hay usuario autenticado');
+      return;
+    }
 
     try {
+      console.log('📊 Cargando historial de asistencia para user_id:', user.id);
+
       const [attendanceData, statsData, coursesData] = await Promise.all([
         attendanceApi.getByUser(user.id, 50),
         attendanceApi.getUserStats(user.id),
         courseApi.getAll(),
       ]);
 
+      console.log('📥 Datos de asistencia:', attendanceData);
+      console.log('📈 Estadísticas:', statsData);
+      console.log('📚 Cursos cargados:', coursesData.length);
+
       setAttendance(attendanceData.data);
-      setStats(statsData);
+      setStats(statsData); // Ya viene mapeado desde api.ts
 
       const courseMap = new Map<number, string>();
       coursesData.forEach(c => courseMap.set(c.id, c.name));
       setCourses(courseMap);
-    } catch (error) {
-      console.error('Error loading attendance:', error);
+
+      console.log(`✅ Historial cargado: ${attendanceData.data.length} registros`);
+    } catch (error: any) {
+      console.error('❌ Error loading attendance:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -70,64 +86,69 @@ export default function AttendanceHistoryScreen() {
     );
   };
 
-  const renderAttendanceItem = ({ item }: { item: AttendanceRecord }) => (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.cardHeaderLeft}>
-          <MaterialIcons name="school" size={24} color="#3B82F6" />
-          <View style={styles.cardHeaderText}>
-            <Text style={styles.courseCode}>{item.course_code}</Text>
-            <Text style={styles.courseName}>
-              {courses.get(item.course_id) || 'Curso'}
-            </Text>
+  const renderAttendanceItem = ({ item }: { item: AttendanceRecord }) => {
+    // Usar actual_arrival si existe, sino class_date
+    const displayDate = item.actual_arrival || item.class_date || item.created_at;
+
+    return (
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <View style={styles.cardHeaderLeft}>
+            <MaterialIcons name="school" size={24} color="#3B82F6" />
+            <View style={styles.cardHeaderText}>
+              <Text style={styles.courseCode}>{item.course_code || `Curso ${item.course_id}`}</Text>
+              <Text style={styles.courseName}>
+                {courses.get(item.course_id) || 'Curso Desconocido'}
+              </Text>
+            </View>
           </View>
-        </View>
-        {getStatusBadge(item.status)}
-      </View>
-
-      <View style={styles.cardBody}>
-        <View style={styles.infoRow}>
-          <MaterialIcons name="access-time" size={16} color="#6B7280" />
-          <Text style={styles.infoText}>
-            {new Date(item.class_date).toLocaleString('es-ES', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </Text>
+          {getStatusBadge(item.status)}
         </View>
 
-        {item.recorded_distance != null && (
+        <View style={styles.cardBody}>
           <View style={styles.infoRow}>
-            <MaterialIcons name="my-location" size={16} color="#6B7280" />
+            <MaterialIcons name="access-time" size={16} color="#6B7280" />
             <Text style={styles.infoText}>
-              Distancia: {Number(item.recorded_distance).toFixed(1)}m
+              {new Date(displayDate).toLocaleString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </Text>
           </View>
-        )}
 
-        {item.classroom_name && (
+          {item.recorded_distance != null && (
+            <View style={styles.infoRow}>
+              <MaterialIcons name="my-location" size={16} color="#6B7280" />
+              <Text style={styles.infoText}>
+                Distancia: {Number(item.recorded_distance).toFixed(1)}m
+              </Text>
+            </View>
+          )}
+
+          {item.classroom_name && (
+            <View style={styles.infoRow}>
+              <MaterialIcons name="meeting-room" size={16} color="#6B7280" />
+              <Text style={styles.infoText}>{item.classroom_name}</Text>
+            </View>
+          )}
+
           <View style={styles.infoRow}>
-            <MaterialIcons name="meeting-room" size={16} color="#6B7280" />
-            <Text style={styles.infoText}>{item.classroom_name}</Text>
+            <MaterialIcons
+              name={item.source === 'gps_auto' ? 'gps-fixed' : 'edit'}
+              size={16}
+              color="#6B7280"
+            />
+            <Text style={styles.infoText}>
+              {item.source === 'gps_auto' ? 'GPS Automático' : 'Manual'}
+            </Text>
           </View>
-        )}
-
-        <View style={styles.infoRow}>
-          <MaterialIcons
-            name={item.source === 'gps_auto' ? 'gps-fixed' : 'edit'}
-            size={16}
-            color="#6B7280"
-          />
-          <Text style={styles.infoText}>
-            {item.source === 'gps_auto' ? 'GPS Automático' : 'Manual'}
-          </Text>
         </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   if (isLoading) {
     return (

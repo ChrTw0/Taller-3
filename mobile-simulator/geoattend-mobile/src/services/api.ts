@@ -91,6 +91,25 @@ export const courseApi = {
     const response = await api.get<Course>(`/courses/${id}/`);
     return response.data;
   },
+
+  getCoordinates: async (courseId: number): Promise<{
+    course_id: number;
+    course_code: string;
+    detection_radius: number;
+    classrooms: Array<{
+      id: number;
+      latitude: number;
+      longitude: number;
+      altitude?: number;
+      gps_radius: number;
+      building: string;
+      room_number: string;
+      name: string;
+    }>;
+  }> => {
+    const response = await api.get(`/courses/${courseId}/coordinates`);
+    return response.data;
+  },
 };
 
 // Enrollment API
@@ -114,14 +133,14 @@ export const attendanceApi = {
     const response = await api.get<any>(`/attendance/user/${userId}/stats`, {
       params: courseId ? { course_id: courseId } : {},
     });
-    // El backend devuelve { statistics: {...} }, extraer la parte statistics
+    // El backend devuelve { statistics: { total_sessions, attended_sessions, ... } }
     const stats = response.data.statistics || response.data;
     return {
       user_id: response.data.user_id || userId,
-      total_records: stats.total_records || 0,
-      present_count: stats.present_count || 0,
-      late_count: stats.late_count || 0,
-      absent_count: stats.absent_count || 0,
+      total_records: stats.total_sessions || 0,
+      present_count: stats.attended_sessions || 0,
+      late_count: stats.late_sessions || 0,
+      absent_count: stats.absent_sessions || 0,
       attendance_rate: stats.attendance_rate || 0,
     };
   },
@@ -154,6 +173,11 @@ export const gpsApi = {
 export const scheduleApi = {
   getByCourse: async (courseId: number): Promise<any[]> => {
     const response = await api.get<{ success: boolean; message: string; data: any[] }>(`/schedules/course/${courseId}`);
+    return response.data.data;
+  },
+
+  getCurrentSchedule: async (courseId: number): Promise<any | null> => {
+    const response = await api.get<{ success: boolean; message: string; data: any | null }>(`/schedules/course/${courseId}/current`);
     return response.data.data;
   },
 };

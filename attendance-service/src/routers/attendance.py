@@ -264,3 +264,46 @@ async def get_course_attendance_stats(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error"
         )
+
+@router.post(
+    "/mark-absences",
+    response_model=dict,
+    summary="Mark Absent Students",
+    description="Mark students as absent if they didn't register attendance after class ended"
+)
+async def mark_absent_students(
+    course_id: int = Query(..., description="Course ID"),
+    schedule_id: int = Query(..., description="Schedule ID"),
+    class_date: datetime = Query(..., description="Class date"),
+    db: AsyncSession = Depends(get_session)
+):
+    """
+    Mark students as absent if they didn't register attendance.
+    This endpoint should be called after class ends.
+    """
+    logger.info(f"📋 Marking absences for course {course_id}, schedule {schedule_id}, date {class_date}")
+
+    try:
+        service = AttendanceService()
+        result = await service.mark_absences_for_session(
+            db=db,
+            course_id=course_id,
+            schedule_id=schedule_id,
+            class_date=class_date
+        )
+
+        logger.info(f"✅ Absences marked: {result['marked_absent']} students")
+        return {
+            "success": True,
+            "message": f"Marked {result['marked_absent']} students as absent",
+            "data": result
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error marking absences: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error marking absences: {str(e)}"
+        )

@@ -108,6 +108,18 @@ export interface GPSEventResponse {
   };
 }
 
+// Schedule types
+export interface Schedule {
+  id: number;
+  course_id: number;
+  day_of_week: number; // 0=Lunes, 1=Martes, ..., 6=Domingo
+  start_time: string;
+  end_time: string;
+  classroom_id: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 // Notification types
 export interface Notification {
   id: number;
