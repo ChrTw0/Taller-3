@@ -175,22 +175,38 @@ export const classroomApi = {
 // Enrollment endpoints
 export const enrollmentApi = {
   getAll: async (filters?: EnrollmentFilters): Promise<Enrollment[]> => {
-    const response = await api.get<Enrollment[]>('/enrollments/', { params: filters });
-    return response.data;
+    const response = await api.get<any>('/enrollments/', { params: filters });
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return []; 
   },
   getById: async (id: number): Promise<Enrollment> => {
     const response = await api.get<Enrollment>(`/enrollments/${id}`);
     return response.data;
   },
   getByCourse: async (courseId: number): Promise<Enrollment[]> => {
-    const response = await api.get<{ success: boolean; message: string; data: Enrollment[] }>(
-      `/enrollments/course/${courseId}`
-    );
-    return response.data.data;
+    const response = await api.get<any>(`/enrollments/course/${courseId}`);
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return [];
   },
   getByStudent: async (studentId: number): Promise<Enrollment[]> => {
-    const response = await api.get<Enrollment[]>(`/enrollments/`, { params: { student_id: studentId } });
-    return response.data;
+    const response = await api.get<any>(`/enrollments/`, { params: { student_id: studentId } });
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return []; 
   },
   create: async (data: CreateEnrollmentData): Promise<{ success: boolean; message: string; data: Enrollment }> => {
     const response = await api.post('/enrollments/', data);
