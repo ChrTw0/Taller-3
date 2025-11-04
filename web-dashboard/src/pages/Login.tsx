@@ -38,7 +38,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       const response = await authApi.login({ email, password });
-      login(response.user, response.data.access_token);
+      login({ user: response.user, token: response.data.access_token });
       toast.success(`Bienvenido, ${response.user.first_name}`);
       navigate('/dashboard');
     } catch (error: any) {
@@ -124,7 +124,7 @@ export default function Login() {
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
               <p>Credenciales de prueba:</p>
-              <p className="mt-1 font-mono text-xs">admin@test.com / Password123@</p>
+              <p className="mt-1 font-mono text-xs">admin@test.com / Password123</p>
             </div>
           </CardContent>
         </Card>

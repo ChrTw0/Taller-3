@@ -55,13 +55,24 @@ export default function Enrollments() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [enrollmentsData, coursesData, usersData] = await Promise.all([
-        enrollmentApi.getAll(),
+      // El endpoint enrollmentApi.getAll() no existe.
+      // Se obtendrán las inscripciones iterando sobre cada curso.
+      const [coursesData, usersData] = await Promise.all([
         courseApi.getAll(),
         userApi.getAll(),
       ]);
 
-      setEnrollments(enrollmentsData);
+      // Obtener inscripciones para cada curso
+      const enrollmentPromises = coursesData.map(course =>
+        enrollmentApi.getByCourse(course.id).catch(err => {
+          console.warn(`No se pudieron cargar las inscripciones para el curso ${course.id}:`, err);
+          return []; // Devolver array vacío en caso de error para no detener el proceso
+        })
+      );
+      const enrollmentsByCourse = await Promise.all(enrollmentPromises);
+      const allEnrollments = enrollmentsByCourse.flat();
+
+      setEnrollments(allEnrollments);
       setCourses(coursesData);
       setStudents(usersData.filter(u => u.role === 'student'));
     } catch (error: any) {

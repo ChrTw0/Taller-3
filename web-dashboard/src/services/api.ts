@@ -4,8 +4,10 @@ import type { Course, CourseDetail, CreateCourseData, UpdateCourseData, CourseFi
 import type { Classroom, CreateClassroomData, UpdateClassroomData, ClassroomFilters } from '@/types/classroom';
 import type { Enrollment, CreateEnrollmentData, UpdateEnrollmentData, EnrollmentFilters } from '@/types/enrollment';
 import type { AttendanceRecord, AttendanceListResponse, AttendanceFilters, UserAttendanceStats, CourseAttendanceStats, CreateAttendanceData } from '@/types/attendance';
+import type { OverallAttendanceStats } from '@/types/kpi';
 
-const API_BASE_URL = 'http://192.168.1.4:8000/api/v1';
+//const API_BASE_URL = 'http://192.168.1.4:8000/api/v1';
+const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -181,8 +183,10 @@ export const enrollmentApi = {
     return response.data;
   },
   getByCourse: async (courseId: number): Promise<Enrollment[]> => {
-    const response = await api.get<Enrollment[]>(`/enrollments/`, { params: { course_id: courseId } });
-    return response.data;
+    const response = await api.get<{ success: boolean; message: string; data: Enrollment[] }>(
+      `/enrollments/course/${courseId}`
+    );
+    return response.data.data;
   },
   getByStudent: async (studentId: number): Promise<Enrollment[]> => {
     const response = await api.get<Enrollment[]>(`/enrollments/`, { params: { student_id: studentId } });
@@ -232,6 +236,12 @@ export const attendanceApi = {
   },
   create: async (data: CreateAttendanceData): Promise<{ success: boolean; message: string; data: AttendanceRecord }> => {
     const response = await api.post('/attendance/process', data);
+    return response.data;
+  },
+  getOverallStats: async (startDate?: string, endDate?: string): Promise<OverallAttendanceStats> => {
+    const response = await api.get<OverallAttendanceStats>('/attendance/stats/overall', {
+      params: { start_date: startDate, end_date: endDate },
+    });
     return response.data;
   },
 };

@@ -85,8 +85,8 @@ Cada microservicio requiere un archivo `.env`:
 ```bash
 # user-service/.env
 DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5433/user_db
-SECRET_KEY=your-secret-key-min-32-chars
-ALGORITHM=HS256
+JWT_SECRET_KEY=your-secret-key-min-32-chars
+JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
@@ -116,8 +116,8 @@ SECRET_KEY=your-secret-key-min-32-chars
 
 #### API Gateway (.env)
 ```bash
-# api-gateway/.env
-SECRET_KEY=your-secret-key-min-32-chars
+# api-gateway/.env (La clave para firmar los JWT)
+JWT_SECRET_KEY=your-secret-key-min-32-chars
 USER_SERVICE_URL=http://localhost:8001
 COURSE_SERVICE_URL=http://localhost:8002
 ATTENDANCE_SERVICE_URL=http://localhost:8003
@@ -464,5 +464,3 @@ npm install
 3. Commit cambios (`git commit -m 'Agregar nueva funcionalidad'`)
 4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Abrir Pull Request
-
-

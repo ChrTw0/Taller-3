@@ -21,14 +21,14 @@ class UserServiceSettings(BaseSettings):
     # Security - User Service handles authentication
     secret_key: str = Field(
         default="user-service-secret-key-change-in-production",
-        alias="SECRET_KEY"
+        alias="JWT_SECRET_KEY"
     )
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
 
     # Password Policy
     password_min_length: int = Field(default=8, alias="PASSWORD_MIN_LENGTH")
-    password_require_special: bool = Field(default=True, alias="PASSWORD_REQUIRE_SPECIAL")
+    password_require_special: bool = Field(default=False, alias="PASSWORD_REQUIRE_SPECIAL")
 
     # Inter-service Communication
     course_service_url: str = Field(default="http://localhost:8002", alias="COURSE_SERVICE_URL")

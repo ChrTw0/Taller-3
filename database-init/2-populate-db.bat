@@ -26,7 +26,7 @@ echo [1/8] Autenticacion...
 
 curl -s -X POST "%USER_SERVICE%/auth/login" ^
   -H "Content-Type: application/json" ^
-  -d "{\"email\":\"admin@test.com\",\"password\":\"Password123@\"}" > temp_login.json
+  -d "{\"email\":\"admin@test.com\",\"password\":\"Password123\"}" > temp_login.json
 
 REM Extraer token del JSON (requiere jq o PowerShell)
 for /f "delims=" %%i in ('powershell -command "(Get-Content temp_login.json | ConvertFrom-Json).data.access_token"') do set TOKEN=%%i
@@ -50,68 +50,68 @@ echo   Creando profesor: PROF001 - Maria Garcia
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF001\",\"email\":\"maria.garcia@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Garcia\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF001\",\"email\":\"maria.garcia@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Garcia\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 echo   Creando profesor: PROF002 - Leonidas Zarate
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF002\",\"email\":\"leonidas.zarate@test.com\",\"first_name\":\"LEONIDAS BENITO\",\"last_name\":\"ZARATE OTAROLA\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF002\",\"email\":\"leonidas.zarate@test.com\",\"first_name\":\"LEONIDAS BENITO\",\"last_name\":\"ZARATE OTAROLA\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 echo   Creando profesor: PROF003 - Richard Zamora
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF003\",\"email\":\"richard.zamora@test.com\",\"first_name\":\"RICHARD ISMAEL\",\"last_name\":\"ZAMORA YANSI\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF003\",\"email\":\"richard.zamora@test.com\",\"first_name\":\"RICHARD ISMAEL\",\"last_name\":\"ZAMORA YANSI\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 echo   Creando profesor: PROF004 - Hilario Aradiel
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF004\",\"email\":\"hilario.aradiel@test.com\",\"first_name\":\"HILARIO\",\"last_name\":\"ARADIEL CASTANEDA\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF004\",\"email\":\"hilario.aradiel@test.com\",\"first_name\":\"HILARIO\",\"last_name\":\"ARADIEL CASTANEDA\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 echo   Creando profesor: PROF005 - Javier Canchano
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF005\",\"email\":\"javier.canchano@test.com\",\"first_name\":\"JAVIER TOLENTINO\",\"last_name\":\"CANCHANO CARO\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF005\",\"email\":\"javier.canchano@test.com\",\"first_name\":\"JAVIER TOLENTINO\",\"last_name\":\"CANCHANO CARO\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 echo   Creando profesor: PROF006 - Carlos Ramos
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"PROF006\",\"email\":\"carlos.ramos@test.com\",\"first_name\":\"CARLOS NELSON\",\"last_name\":\"RAMOS MONTES\",\"role\":\"teacher\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"PROF006\",\"email\":\"carlos.ramos@test.com\",\"first_name\":\"CARLOS NELSON\",\"last_name\":\"RAMOS MONTES\",\"role\":\"teacher\",\"password\":\"Password123\"}" > nul
 
 REM Estudiantes
 echo   Creando estudiante: EST001 - Juan Perez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST001\",\"email\":\"juan.perez@test.com\",\"first_name\":\"Juan\",\"last_name\":\"Perez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"EST001\",\"email\":\"juan.perez@test.com\",\"first_name\":\"Juan\",\"last_name\":\"Perez\",\"role\":\"student\",\"password\":\"Password123\"}" > nul
 
 echo   Creando estudiante: EST002 - Maria Lopez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST002\",\"email\":\"maria.lopez@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Lopez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"EST002\",\"email\":\"maria.lopez@test.com\",\"first_name\":\"Maria\",\"last_name\":\"Lopez\",\"role\":\"student\",\"password\":\"Password123\"}" > nul
 
 echo   Creando estudiante: EST003 - Pedro Gonzalez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST003\",\"email\":\"pedro.gonzalez@test.com\",\"first_name\":\"Pedro\",\"last_name\":\"Gonzalez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"EST003\",\"email\":\"pedro.gonzalez@test.com\",\"first_name\":\"Pedro\",\"last_name\":\"Gonzalez\",\"role\":\"student\",\"password\":\"Password123\"}" > nul
 
 echo   Creando estudiante: EST004 - Ana Martinez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST004\",\"email\":\"ana.martinez@test.com\",\"first_name\":\"Ana\",\"last_name\":\"Martinez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"EST004\",\"email\":\"ana.martinez@test.com\",\"first_name\":\"Ana\",\"last_name\":\"Martinez\",\"role\":\"student\",\"password\":\"Password123\"}" > nul
 
 echo   Creando estudiante: EST005 - Carlos Rodriguez
 curl -s -X POST "%USER_SERVICE%/auth/register" ^
   -H "Authorization: Bearer %TOKEN%" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"EST005\",\"email\":\"carlos.rodriguez@test.com\",\"first_name\":\"Carlos\",\"last_name\":\"Rodriguez\",\"role\":\"student\",\"password\":\"Password123@\"}" > nul
+  -d "{\"code\":\"EST005\",\"email\":\"carlos.rodriguez@test.com\",\"first_name\":\"Carlos\",\"last_name\":\"Rodriguez\",\"role\":\"student\",\"password\":\"Password123\"}" > nul
 
 echo Usuarios creados
 echo.
@@ -280,11 +280,11 @@ echo ===========================================================================
 echo.
 echo   ADMINISTRADOR:
 echo     Email:    admin@test.com
-echo     Password: Password123@
+echo     Password: Password123
 echo.
 echo   PROFESORES:
 echo     Email:    maria.garcia@test.com (y otros PROF*@test.com)
-echo     Password: Password123@
+echo     Password: Password123
 echo.
 echo   ESTUDIANTES:
 echo     Email:    juan.perez@test.com (EST001)
@@ -292,7 +292,7 @@ echo     Email:    maria.lopez@test.com (EST002)
 echo     Email:    pedro.gonzalez@test.com (EST003)
 echo     Email:    ana.martinez@test.com (EST004)
 echo     Email:    carlos.rodriguez@test.com (EST005)
-echo     Password: Password123@
+echo     Password: Password123
 echo.
 echo ============================================================================
 

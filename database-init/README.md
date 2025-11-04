@@ -228,4 +228,3 @@ Si tienes problemas:
 2. Revisa logs de los servicios
 3. Asegúrate de que los puertos 8000-8004 y 5433-5436 estén libres
 4. Verifica archivos `.env` en cada microservicio
-

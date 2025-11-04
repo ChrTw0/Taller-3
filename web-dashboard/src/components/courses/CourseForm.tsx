@@ -57,7 +57,7 @@ export function CourseForm({ open, onOpenChange, course, onSuccess }: CourseForm
   useEffect(() => {
     if (course) {
       // For edit mode, we need to get the teacher's code
-      const teacher = teachers.find(t => t.id === course.teacher_id.toString());
+      const teacher = teachers.find(t => Number(t.id) === course.teacher_id);
       setFormData({
         code: course.code,
         name: course.name,
@@ -105,7 +105,7 @@ export function CourseForm({ open, onOpenChange, course, onSuccess }: CourseForm
         start_time: s.start_time,
         end_time: s.end_time,
         classroom_id: s.classroom_id,
-        is_active: s.is_active,
+        is_active: (s as any).is_active ?? true,
       })));
 
       // Extract unique classroom IDs from schedules
@@ -236,8 +236,8 @@ export function CourseForm({ open, onOpenChange, course, onSuccess }: CourseForm
               </Label>
               <Select
                 value={formData.teacher_id > 0 ? formData.teacher_id.toString() : undefined}
-                onValueChange={(value) => {
-                  const selectedTeacher = teachers.find(t => t.id.toString() === value);
+                onValueChange={(value: string) => {
+                  const selectedTeacher = teachers.find(t => t.id === value);
                   setFormData({
                     ...formData,
                     teacher_id: parseInt(value),
@@ -251,7 +251,7 @@ export function CourseForm({ open, onOpenChange, course, onSuccess }: CourseForm
                 </SelectTrigger>
                 <SelectContent>
                   {teachers.map((teacher) => (
-                    <SelectItem key={teacher.id} value={teacher.id.toString()}>
+                    <SelectItem key={teacher.id} value={teacher.id}>
                       {teacher.first_name} {teacher.last_name}
                     </SelectItem>
                   ))}

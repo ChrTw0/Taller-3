@@ -21,7 +21,7 @@ echo.
 REM Crear admin usando el endpoint publico (no requiere autenticacion)
 curl -s -X POST "%USER_SERVICE%/users/" ^
   -H "Content-Type: application/json" ^
-  -d "{\"code\":\"ADMIN001\",\"email\":\"admin@test.com\",\"first_name\":\"Admin\",\"last_name\":\"Sistema\",\"role\":\"admin\",\"password\":\"Password123@\"}" > temp_response.json
+  -d "{\"code\":\"ADMIN001\",\"email\":\"admin@test.com\",\"first_name\":\"Admin\",\"last_name\":\"Sistema\",\"role\":\"admin\",\"password\":\"Password123\"}" > temp_response.json
 
 REM Verificar respuesta
 findstr /C:"success" temp_response.json >nul
@@ -30,7 +30,7 @@ if %errorlevel% equ 0 (
   echo.
   echo Credenciales:
   echo   Email:    admin@test.com
-  echo   Password: Password123@
+  echo   Password: Password123
   echo   Codigo:   ADMIN001
   echo   Rol:      admin
   echo.

@@ -4,10 +4,12 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { WeeklySchedule } from '@/components/dashboard/WeeklySchedule';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge'; 
 import { Users, BookOpen, ClipboardCheck, Bell } from 'lucide-react';
 import { userApi, courseApi, enrollmentApi, attendanceApi } from '@/services/api';
 import type { AttendanceRecord } from '@/types/attendance';
+import { KpiDashboard } from '@/components/dashboard/KpiDashboard';
+import { KpiCharts } from '@/components/dashboard/KpiCharts';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -60,7 +62,7 @@ export default function Dashboard() {
         for (const userId of uniqueUserIds) {
           try {
             const userData = await userApi.getById(userId.toString());
-            userMap.set(userData.id, {
+            userMap.set(Number(userData.id), {
               name: `${userData.first_name} ${userData.last_name}`,
               code: userData.code
             });
@@ -114,7 +116,7 @@ export default function Dashboard() {
         for (const userId of uniqueUserIds) {
           try {
             const userData = await userApi.getById(userId.toString());
-            userMap.set(userData.id, {
+            userMap.set(Number(userData.id), {
               name: `${userData.first_name} ${userData.last_name}`,
               code: userData.code
             });
@@ -124,7 +126,7 @@ export default function Dashboard() {
         }
         setUsers(userMap);
 
-        const teacherCourses = allCourses.filter(c => c.teacher_id === user.id);
+        const teacherCourses = allCourses.filter(c => c.teacher_id === Number(user.id));
         const teacherCourseIds = teacherCourses.map(c => c.id);
         const studentsInCourses = allEnrollments.filter(e =>
           teacherCourseIds.includes(e.course_id) && e.status === 'active'
@@ -144,8 +146,8 @@ export default function Dashboard() {
       } else if (user.role === 'student') {
         console.log('🔵 Dashboard: Loading student data for user ID:', user.id);
         const [myEnrollments, myAttendance] = await Promise.all([
-          enrollmentApi.getByStudent(user.id),
-          attendanceApi.getByUser(user.id, { limit: 100 })
+          enrollmentApi.getByStudent(Number(user.id)),
+          attendanceApi.getByUser(Number(user.id), { limit: 100 })
         ]);
         console.log('✅ Dashboard: Student data loaded - Enrollments:', myEnrollments.length, 'Attendance:', myAttendance.total);
 
@@ -224,9 +226,20 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* KPI Dashboard - Only for admins */}
+        {!isLoading && user?.role === 'admin' && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Estadísticas Generales</h2>
+            <KpiDashboard />
+            <div className="mt-6">
+              <KpiCharts />
+            </div>
+          </div>
+        )}
+
         {/* Weekly Schedule - Only for students */}
         {!isLoading && user?.role === 'student' && (
-          <WeeklySchedule userId={user.id} />
+          <WeeklySchedule userId={Number(user.id)} />
         )}
 
         {/* Recent Activity */}

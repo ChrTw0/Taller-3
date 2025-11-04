@@ -44,7 +44,7 @@ export default function Courses() {
       if (user?.role === 'student') {
         console.log('🔵 Courses: Loading student courses');
         // Estudiantes: obtener solo los cursos en los que están matriculados
-        const enrollments = await enrollmentApi.getByStudent(user.id);
+        const enrollments = await enrollmentApi.getByStudent(Number(user.id));
         console.log('✅ Courses: Enrollments loaded:', enrollments.length);
         const allCourses = await courseApi.getAll();
         console.log('✅ Courses: All courses loaded:', allCourses.length);
@@ -64,7 +64,7 @@ export default function Courses() {
         for (const teacherId of uniqueTeacherIds) {
           try {
             const teacher = await userApi.getById(teacherId.toString());
-            teacherMap.set(teacher.id, `${teacher.first_name} ${teacher.last_name}`);
+            teacherMap.set(Number(teacher.id), `${teacher.first_name} ${teacher.last_name}`);
             console.log('✅ Courses: Teacher loaded:', teacher.id, teacher.first_name);
           } catch (error) {
             console.error(`❌ Courses: Could not load teacher ${teacherId}`, error);
@@ -77,12 +77,12 @@ export default function Courses() {
         // Profesores: solo sus cursos
         const allCourses = await courseApi.getAll();
         console.log('✅ Courses: All courses loaded:', allCourses.length);
-        coursesData = allCourses.filter(course => course.teacher_id === user.id);
+        coursesData = allCourses.filter(course => course.teacher_id === Number(user.id));
         console.log('✅ Courses: Filtered teacher courses:', coursesData.length);
 
         // Cargar su propio nombre
         const teacherMap = new Map<number, string>();
-        teacherMap.set(user.id, `${user.first_name} ${user.last_name}`);
+        teacherMap.set(Number(user.id), `${user.first_name} ${user.last_name}`);
         setTeachers(teacherMap);
       } else {
         console.log('🔵 Courses: Loading admin courses');
@@ -98,7 +98,7 @@ export default function Courses() {
         for (const teacherId of uniqueTeacherIds) {
           try {
             const teacher = await userApi.getById(teacherId.toString());
-            teacherMap.set(teacher.id, `${teacher.first_name} ${teacher.last_name}`);
+            teacherMap.set(Number(teacher.id), `${teacher.first_name} ${teacher.last_name}`);
           } catch (error) {
             console.warn(`Could not load teacher ${teacherId}`);
           }

@@ -89,7 +89,7 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:1234@user-db:5432/user_db
       SERVICE_PORT: 8001
-      SECRET_KEY: user-service-secret-key-change-in-production
+      JWT_SECRET_KEY: user-service-secret-key-change-in-production
     ports:
       - "8001:8001"
     networks:
