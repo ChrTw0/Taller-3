@@ -3,6 +3,7 @@
 ## 👥 Equipo
 
 **Integrantes**
+- Inocente Caro, Miguel Anderson
 - Miguel Sullca, Diego Alonso
 - Paredes Mateo, Eduard Rafael
 - Sosa Ramirez, Christian Renato
