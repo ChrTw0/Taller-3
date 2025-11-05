@@ -10,6 +10,7 @@ import { userApi, courseApi, enrollmentApi, attendanceApi } from '@/services/api
 import type { AttendanceRecord } from '@/types/attendance';
 import { KpiDashboard } from '@/components/dashboard/KpiDashboard';
 import { KpiCharts } from '@/components/dashboard/KpiCharts';
+import { TeacherCharts } from '@/components/dashboard/TeacherCharts'
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -22,6 +23,13 @@ export default function Dashboard() {
   useEffect(() => {
     if (user) {
       loadDashboardData();
+
+      const intervalId = setInterval(() => {
+        console.log('🔵 Dashboard: Polling for new data...');
+        loadDashboardData();
+      }, 30000); 
+
+      return () => clearInterval(intervalId);
     }
   }, [user?.id]);
 
@@ -240,6 +248,11 @@ export default function Dashboard() {
         {/* Weekly Schedule - Only for students */}
         {!isLoading && user?.role === 'student' && (
           <WeeklySchedule userId={Number(user.id)} />
+        )}
+
+        {/* Teacher Charts */}
+        {!isLoading && user?.role === 'teacher' && (
+          <TeacherCharts teacherId={Number(user.id)} />
         )}
 
         {/* Recent Activity */}

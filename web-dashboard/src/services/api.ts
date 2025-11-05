@@ -60,10 +60,12 @@ export const userApi = {
     return response.data;
   },
   getTeachers: async (): Promise<User[]> => {
-    // Get all users and filter teachers/admins on client side
-    const response = await api.get<User[]>('/users/');
-    const users = response.data;
-    return users.filter(user => user.role === 'teacher' || user.role === 'admin');
+    const [teachers, admins] = await Promise.all([
+      api.get<User[]>('/users/', { params: { role: 'teacher' } }),
+      api.get<User[]>('/users/', { params: { role: 'admin' } })
+    ]);
+    // La respuesta de /users/ es un objeto { data: [...] } o un array directo.
+    return [...(Array.isArray(teachers.data) ? teachers.data : []), ...(Array.isArray(admins.data) ? admins.data : [])];
   },
   getById: async (id: string): Promise<User> => {
     const response = await api.get<User>(`/users/${id}`);

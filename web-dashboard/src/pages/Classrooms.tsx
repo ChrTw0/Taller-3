@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { classroomApi } from '@/services/api';
+import { classroomApi, courseApi, scheduleApi } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -52,8 +52,29 @@ export default function Classrooms() {
   const loadClassrooms = async () => {
     setIsLoading(true);
     try {
-      const data = await classroomApi.getAll();
-      setClassrooms(data);
+      if (user?.role === 'admin') {
+        const data = await classroomApi.getAll();
+        setClassrooms(data);
+      } else if (user?.role === 'teacher') {
+        // 1. Obtener los cursos del profesor
+        const allCourses = await courseApi.getAll();
+        const teacherCourses = allCourses.filter(c => c.teacher_id === Number(user.id));
+
+        // 2. Obtener los horarios de esos cursos
+        const schedulePromises = teacherCourses.map(course => scheduleApi.getByCourse(course.id));
+        const schedulesByCourse = await Promise.all(schedulePromises);
+        const allSchedules = schedulesByCourse.flat();
+
+        // 3. Extraer IDs únicos de aulas
+        const classroomIds = [...new Set(allSchedules.map(s => s.classroom_id).filter(id => id !== null))] as number[];
+
+        // 4. Cargar solo esas aulas
+        if (classroomIds.length > 0) {
+          const classroomPromises = classroomIds.map(id => classroomApi.getById(id));
+          const teacherClassrooms = await Promise.all(classroomPromises);
+          setClassrooms(teacherClassrooms);
+        }
+      }
     } catch (error: any) {
       console.error('Error loading classrooms:', error);
       toast.error('Error al cargar aulas');
@@ -162,15 +183,7 @@ export default function Classrooms() {
     }
   };
 
-  if (user?.role !== 'admin') {
-    return (
-      <DashboardLayout>
-        <div className="flex h-96 items-center justify-center">
-          <p className="text-muted-foreground">No tienes permisos para acceder a esta página</p>
-        </div>
-      </DashboardLayout>
-    );
-  }
+  const canManage = user?.role === 'admin';
 
   return (
     <DashboardLayout>
@@ -181,10 +194,12 @@ export default function Classrooms() {
             <h1 className="text-3xl font-bold text-foreground">Aulas</h1>
             <p className="text-muted-foreground">Gestiona las aulas y su configuración GPS</p>
           </div>
-          <Button className="gap-2" onClick={handleCreateClassroom}>
-            <Plus className="h-4 w-4" />
-            Crear Aula
-          </Button>
+          {canManage && (
+            <Button className="gap-2" onClick={handleCreateClassroom}>
+              <Plus className="h-4 w-4" />
+              Crear Aula
+            </Button>
+          )}
         </div>
 
         {/* Search */}
@@ -216,12 +231,14 @@ export default function Classrooms() {
               <p className="text-muted-foreground">
                 {searchTerm ? 'No se encontraron aulas' : 'No hay aulas registradas'}
               </p>
-              {!searchTerm && (
+              {!searchTerm && canManage && (
                 <Button className="mt-4" onClick={handleCreateClassroom}>
                   <Plus className="mr-2 h-4 w-4" />
                   Crear Primera Aula
                 </Button>
               )}
+              {!searchTerm && !canManage && (
+                <p className="text-sm text-muted-foreground mt-2">No hay aulas disponibles para visualizar.</p>              )}
             </CardContent>
           </Card>
         )}
@@ -271,25 +288,27 @@ export default function Classrooms() {
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-border flex gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1"
-                      size="sm"
-                      onClick={() => handleEditClassroom(classroom)}
-                    >
-                      <Edit className="mr-1 h-3 w-3" />
-                      Editar
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteClassroom(classroom)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
+                  {canManage && (
+                    <div className="mt-4 pt-4 border-t border-border flex gap-2">
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        size="sm"
+                        onClick={() => handleEditClassroom(classroom)}
+                      >
+                        <Edit className="mr-1 h-3 w-3" />
+                        Editar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteClassroom(classroom)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
